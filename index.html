@@ -145,7 +145,8 @@
 </div>
 
 <script>
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwKGmcM-912OnU3ZzKtW8iNL5Cy655vnUGHbtygRIeYcwHTSKWGtpeTliZKTH1zZTvfmg/exec"; 
+    // Link definitivo fornecido por você
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwHsp0iEYftUmrdCsysARfoXwif8J6OLO9U_kiuMnQYnYhktXQ7cAVvPmqfYKODEFiRmw/exec"; 
     
     let dadosGerais = [];
     let proximasDatas = {};
@@ -201,34 +202,27 @@
         
         // SE NÃO HOUVER EXPOSITOR ATIVO COM "SIM" NESTE LOCAL
         if (filtrados.length === 0) {
-            // Pega o texto bruto guardado no painel de datas para este local
             const dadosDataBrutos = proximasDatas[localSelecionado] || "";
-            
-            // Separa as datas pelas vírgulas (Ex: "25/05/2026, 26/05/2026, 27/05/2026")
             const colunasDeData = dadosDataBrutos.split(',').map(d => d.trim()).filter(d => d !== "");
             
-            // A Coluna B será sempre o primeiro item do array
             const dataPrincipalStr = colunasDeData[0] || "";
             let dataEventoObj = converterData(dataPrincipalStr);
             
             let hoje = new Date();
             hoje.setHours(0,0,0,0);
 
-            // Se existir uma primeira data válida e ela for no futuro
+            // Se existir uma primeira data válida no painel de controle e for futura
             if (dataPrincipalStr && dataEventoObj && dataEventoObj >= hoje) {
                 
-                // LÓGICA DE MONTAGEM DO PERÍODO POR EXTENSO
                 let textoPeriodo = dataPrincipalStr;
                 
                 if (colunasDeData.length === 2) {
-                    // Se tiver 2 dias: "25/05/2026 e 26/05/2026"
                     textoPeriodo = `${colunasDeData[0]} e ${colunasDeData[1]}`;
                 } else if (colunasDeData.length >= 3) {
-                    // Se tiver 3 dias: "25/05/2026, 26/05/2026 e 27/05/2026"
                     textoPeriodo = `${colunasDeData[0]}, ${colunasDeData[1]} e ${colunasDeData[2]}`;
                 }
 
-                corpeHTML = `
+                corpo.innerHTML = `
                     <div class="aviso-evento-breve">
                         <h3>🏛️ ${localSelecionado}</h3>
                         <p>📅 <strong>PRÓXIMO EVENTO: ${textoPeriodo}</strong></p>
@@ -236,9 +230,8 @@
                         <button class="btn-abrir-form" onclick="abrirFormulario()">Quero Participar ➕</button>
                     </div>
                 `;
-                corpo.innerHTML = corpeHTML;
             } else {
-                // Se a primeira data já passou ou está em branco
+                // Mensagem amigável em Português do Brasil se o prazo expirou ou está sem data
                 corpo.innerHTML = `
                     <div class="aviso-evento-breve">
                         <h3>🏛️ ${localSelecionado}</h3>
@@ -250,7 +243,7 @@
             return;
         }
         
-        // SE HOUVER EXPOSITORES ATIVOS COM "SIM", CRIA OS CARDS
+        // SE HOUVER EXPOSITORES ATIVOS COM "SIM", CRIA OS CARDS DA VITRINE
         corpo.innerHTML = filtrados.map(item => {
             let urlFoto = item.foto || "";
             if (urlFoto.includes('drive.google.com')) {
