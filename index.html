@@ -265,4 +265,66 @@
         
         // Botão de rodapé para novos cadastros
         corpo.innerHTML += `
-            <div style="grid-column: 1/-1
+            <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
+                <button class="btn-abrir-form" style="background: var(--cor-principal);" onclick="abrirFormulario()">Quero expor neste local ➕</button>
+            </div>
+        `;
+    }
+
+    const inputZap = document.getElementById('inputZap');
+    if(inputZap) inputZap.addEventListener('input', function(e) { this.value = this.value.replace(/\D/g, ''); });
+
+    document.getElementById('formIndicar').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnEnviar');
+        btn.innerText = "Enviando dados e foto..."; btn.disabled = true;
+        
+        const fileInput = document.getElementById('fotoArquivo');
+        const file = fileInput.files[0];
+        
+        if(!file) { alert("Por favor, selecione uma foto."); btn.disabled = false; return; }
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async function () {
+            const base64Data = reader.result.split(',')[1];
+            const formData = new FormData(e.target);
+            const dataHoje = new Date().toLocaleDateString('pt-BR');
+            
+            const objeto = {
+                contato: formData.get('contato'),
+                email: formData.get('email'),
+                marca: formData.get('marca'),
+                segmento: formData.get('segmento'),
+                descricao: formData.get('descricao'),
+                whatsapp: formData.get('whatsapp'),
+                instagram: formData.get('instagram'),
+                facebook: formData.get('facebook'),
+                tiktok: formData.get('tiktok'),
+                eventoAnterior: formData.get('eventoAnterior'),
+                localEvento: localSelecionado,
+                dataEvento: dataHoje,
+                arquivoData: base64Data,
+                arquivoNome: file.name,
+                arquivoMime: file.type
+            };
+            
+            try {
+                await fetch(URL_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(objeto) });
+                document.getElementById('conteudo-form').innerHTML = `
+                    <div style="text-align: center; padding: 30px;">
+                        <div style="font-size: 40px;">🎉</div>
+                        <h2 style="color: var(--cor-principal);">Inscrição Recebida!</h2>
+                        <p>Seus dados e sua foto foram enviados com sucesso para a análise da Cláudia Dib.</p>
+                        <p style="font-size:13px; color:#666;">Assim que a confirmação for realizada na planilha, sua marca subirá para a vitrine do evento!</p>
+                        <button onclick="location.reload()" class="btn-enviar">VOLTAR PARA A VITRINE</button>
+                    </div>
+                `;
+            } catch (err) { alert("Erro ao enviar dados."); btn.innerText = "Enviar Inscrição"; btn.disabled = false; }
+        };
+    };
+
+    buscarDados();
+</script>
+</body>
+</html>
