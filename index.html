@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guia de Vizinhos - Jd Maria Rosa</title>
+    <title>Guia Espaço de Compras Cláudia Dib</title>
     <style>
         :root { --azul: #004a99; --azul-claro: #f0f4f8; --verde: #25d366; --borda: #e1e8ed; --cinza-protecao: #f8f9fa; }
         body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: transparent; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
@@ -50,7 +50,7 @@
 
 <div class="container-guia">
     <div class="acoes-topo">
-        <strong id="titulo-pagina" style="color: var(--azul)">GUIA DE VIZINHOS</strong>
+        <strong id="titulo-pagina" style="color: var(--azul)">GUIA DE EXPOSITORES</strong>
         <button id="btnTrocar" class="btn-toggle" onclick="alternarTela()">➕ INDICAR NOVO</button>
     </div>
 
@@ -100,17 +100,17 @@
 <img src="indique.png" alt="Indique" class="banner-final" onclick="if(telaAtual==='lista')alternarTela()">
 
 <div class="banner-protecao">
-    <strong>© Cláudia Oliveira - Guia Colaborativo Jd Maria Rosa</strong>
-    Iniciativa sem fins lucrativos. As indicações são de inteira responsabilidade dos moradores. Não garantimos a veracidade dos dados. Reservamo-nos o direito de excluir qualquer contato sem aviso prévio. Proibida a venda.<br>
+    <strong>© Cláudia Oliveira - Guia Colaborativo</strong>
+    Reservamo-nos o direito de excluir qualquer contato sem aviso prévio.<br>
     
-    <a href="https://wa.me/5511951392684?text=Olá Claudia, gostaria de solicitar a exclusão de um contato no Guia Maria Rosa." 
+    <a href="https://wa.me/5511951392684?text=Olá Claudia, gostaria de solicitar a exclusão de um contato no Guia Espaço de Compras." 
        class="link-exclusao" target="_blank">
        ℹ️ Solicitar exclusão de número
     </a>
 </div>
 
 <script>
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwIiiSuQ5vnRbJfh01F1t8XkYvmNXfPaSyH9eZTN4zECcQ_JfYAHdyy2FAR9yqJxhto/exec"; 
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz-OYE5ixFtwgnds110Aga3q6uoiP9dowIYro0p7rVDqmQfDeT0mBKiDg4Oqxhp8bdVnw/exec"; 
     let dadosGerais = [];
     let telaAtual = "lista";
 
@@ -123,12 +123,12 @@
         if (telaAtual === "lista") {
             telaLista.style.display = "none"; telaForm.style.display = "block";
             btn.innerText = "⬅ VOLTAR"; btn.classList.add('voltar');
-            titulo.innerText = "NOVA INDICAÇÃO DO MORADOR DO COND. JARDIM MARIA ROSA";
+            titulo.innerText = "NOVO CADASTRO DE EXPOSITOR";
             telaAtual = "cadastro";
         } else {
             telaLista.style.display = "block"; telaForm.style.display = "none";
             btn.innerText = "➕ INDICAR NOVO"; btn.classList.remove('voltar');
-            titulo.innerText = "GUIA DE VIZINHOS";
+            titulo.innerText = "GUIA ESPAÇO DE COMPRAS CLÁUDIA DIB";
             telaAtual = "lista";
         }
     }
@@ -194,7 +194,7 @@
                 <div style="text-align: center; padding: 30px;">
                     <div style="font-size: 40px;">✅</div>
                     <h2 style="color: var(--azul);">Sucesso!</h2>
-                    <p>Sua indicação foi enviada para o Guia Maria Rosa.</p>
+                    <p>Sua indicação foi enviada para o Guia Espaço de Compras Cláudia Dib.</p>
                     <button onclick="location.reload()" class="btn-enviar" style="background: var(--azul);">VOLTAR</button>
                 </div>
             `;
