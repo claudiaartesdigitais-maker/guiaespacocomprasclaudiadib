@@ -15,81 +15,87 @@
             --cinza-protecao: #f8f9fa; 
         }
         
-        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: transparent; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: #fafafa; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
         
-        .container-guia { background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--borda); margin-bottom: 20px; flex-grow: 1; box-shadow: 0 4px 15px rgba(103, 58, 183, 0.08); }
+        .container-guia { background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--borda); margin: 15px; flex-grow: 1; box-shadow: 0 4px 15px rgba(103, 58, 183, 0.08); }
 
-        .acoes-topo { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fff; border-bottom: 2px solid var(--fundo-claro); }
-        .btn-toggle { background: var(--cor-principal); color: white; border: none; padding: 10px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 11px; text-transform: uppercase; transition: 0.3s; }
-        .btn-toggle.voltar { background: #666; }
+        .header-locais { background: #fff; border-bottom: 2px solid var(--fundo-claro); padding: 15px; text-align: center; }
+        .header-locais h2 { margin: 0 0 12px 0; font-size: 16px; color: var(--cor-principal); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .abas-locais { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .btn-local { background: #fff; border: 2px solid var(--borda); padding: 10px 18px; border-radius: 25px; cursor: pointer; color: var(--cor-principal); font-weight: bold; font-size: 12px; text-transform: uppercase; transition: 0.3s; }
+        .btn-local.ativo { background: var(--cor-principal); color: white; border-color: var(--cor-principal); box-shadow: 0 4px 10px rgba(103, 58, 183, 0.3); }
 
-        .filtros { display: flex; overflow-x: auto; padding: 12px; gap: 8px; background: #fafafa; border-bottom: 1px solid var(--borda); scrollbar-width: none; }
-        .filtros::-webkit-scrollbar { display: none; }
-        .btn-filtro { background: #fff; border: 1px solid var(--borda); padding: 7px 14px; border-radius: 15px; white-space: nowrap; cursor: pointer; color: var(--cor-principal); font-weight: bold; font-size: 11px; text-transform: uppercase; }
-        .btn-filtro.ativo { background: var(--cor-principal); color: white; border-color: var(--cor-principal); }
-
-        /* Grade de Expositores em Cards */
+        /* Mosaico de Cards */
         .grade-expositores { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
-        
-        .card-expositor { background: white; border-radius: 12px; border: 1px solid var(--borda); overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: column; }
+        .card-expositor { background: white; border-radius: 12px; border: 1px solid var(--borda); overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; transition: 0.3s; }
+        .card-expositor:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(103, 58, 183, 0.1); }
         
         .foto-expositor { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: #f5f5f5; border-bottom: 1px solid var(--borda); }
         
         .detalhes-expositor { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
-        .segmento-tag { font-size: 10px; font-weight: 800; color: var(--cor-secundaria); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
-        .marca-titulo { font-size: 18px; font-weight: 700; color: #222; margin: 0 0 5px 0; }
-        .responsavel-nome { font-size: 13px; color: #666; margin: 0 0 15px 0; }
+        .segmento-tag { font-size: 11px; font-weight: 800; color: var(--cor-secundaria); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .marca-titulo { font-size: 19px; font-weight: 700; color: #222; margin: 0 0 4px 0; text-transform: uppercase; }
+        .responsavel-nome { font-size: 13px; color: #666; margin: 0 0 15px 0; font-weight: 500; }
         
-        /* Botões de Redes Sociais */
         .botoes-contato { display: flex; gap: 10px; margin-top: auto; }
-        .btn-rede { flex: 1; text-align: center; text-decoration: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-rede { flex: 1; text-align: center; text-decoration: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.2s; }
+        .btn-rede:hover { opacity: 0.9; }
         .btn-zap { background: var(--verde-zap); }
         .btn-insta { background: var(--insta-cor); }
 
-        /* Seção do Formulário de Cadastro */
-        #sessao-cadastro { display: none; padding: 20px; max-width: 500px; margin: 0 auto; }
-        .aviso-privacidade { background: #fff4ff; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #f9ebff; font-size: 12px; color: var(--cor-secundaria); }
-        .campo { margin-bottom: 14px; }
-        .campo label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 4px; color: #444; }
-        .campo input, .campo select { width: 100%; padding: 11px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
-        .btn-enviar { width: 100%; background: var(--cor-principal); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-top: 10px; transition: 0.2s; }
+        /* Mensagem de Evento Breve / Inscrições */
+        .aviso-evento-breve { grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: #fdfaff; border: 2px dashed var(--borda); border-radius: 12px; margin: 10px 20px; }
+        .aviso-evento-breve h3 { margin: 0 0 8px 0; color: var(--cor-principal); font-size: 20px; text-transform: uppercase; }
+        .aviso-evento-breve p { margin: 0 0 15px 0; color: #666; font-size: 14px; }
+        .btn-abrir-form { background: var(--cor-secundaria); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; }
 
-        .banner-final { width: 100%; max-width: 800px; margin: 10px auto; display: block; border-radius: 8px; cursor: pointer; }
-        .banner-protecao { background: var(--cinza-protecao); border-top: 1px solid var(--borda); padding: 15px 25px; text-align: center; font-size: 10px; color: #777; line-height: 1.4; margin-top: auto; }
+        /* Seção do Formulário */
+        #sessao-cadastro { display: none; padding: 25px; max-width: 550px; margin: 0 auto; background: #fff; }
+        .aviso-privacidade { background: #fff4ff; padding: 12px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #f9ebff; font-size: 12px; color: var(--cor-secundaria); line-height: 1.4; }
+        .campo { margin-bottom: 15px; }
+        .campo label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 5px; color: #444; }
+        .campo input, .campo select, .campo textarea { width: 100%; padding: 11px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; box-sizing: border-box; font-family: inherit; }
+        .btn-enviar { width: 100%; background: var(--cor-principal); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-top: 10px; }
+
+        .banner-protecao { background: var(--cinza-protecao); border-top: 1px solid var(--borda); padding: 15px; text-align: center; font-size: 10px; color: #777; margin-top: auto; }
         .banner-protecao strong { color: var(--cor-principal); display: block; margin-bottom: 3px; }
-        .link-exclusao { display: inline-block; margin-top: 8px; color: var(--cor-principal); text-decoration: none; cursor: pointer; font-weight: bold; font-size: 11px; }
-
-        @media (max-width: 600px) {
-            .grade-expositores { grid-template-columns: 1fr; padding: 12px; gap: 15px; }
-            #titulo-pagina { font-size: 12px; }
-        }
     </style>
 </head>
 <body>
 
 <div class="container-guia">
-    <div class="acoes-topo">
-        <strong id="titulo-pagina" style="color: var(--cor-principal)">GUIA DE EXPOSITORES</strong>
-        <button id="btnTrocar" class="btn-toggle" onclick="alternarTela()">➕ QUERO PARTICIPAR</button>
+    <div class="header-locais">
+        <h2>Selecione o Espaço de Compras</h2>
+        <div class="abas-locais">
+            <button class="btn-local ativo" onclick="mudarLocal('Ebusiness Park', this)">Ebusiness Park</button>
+            <button class="btn-local" onclick="mudarLocal('Jaguaré Business Park', this)">Jaguaré Business</button>
+            <button class="btn-local" onclick="mudarLocal('C&A Alphaville', this)">C&A Alphaville</button>
+        </div>
     </div>
 
     <div id="tela-lista">
-        <div class="filtros" id="botoesFiltros">
-            <button class="btn-filtro ativo" onclick="filtrar('Todos', this)">Todos</button>
-        </div>
         <div id="lista-corpo" class="grade-expositores">
-            <div id="msg-vazio" style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">Carregando expositores parceiros...</div>
+            <div id="msg-vazio" style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">Carregando expositores...</div>
         </div>
     </div>
 
     <div id="sessao-cadastro">
         <div id="conteudo-form">
+            <button onclick="fecharFormulario()" style="background:#666; color:white; border:none; padding:6px 12px; border-radius:15px; cursor:pointer; font-size:11px; font-weight:bold; margin-bottom:15px;">⬅ VOLTAR PARA A VITRINE</button>
+            
             <form id="formIndicar">
                 <div class="aviso-privacidade">
-                    <strong>ESPAÇO CLÁUDIA DIB:</strong> Cadastre sua marca aqui! Suas informações passarão por aprovação antes de subir para o site.
+                    <strong>FORMULÁRIO DE INSCRIÇÃO:</strong> Preencha os dados da sua marca abaixo. Após o envio e a confirmação do pagamento, sua marca será ativada no Guia Oficial do evento selecionado.
                 </div>
                 
-                <div class="campo"><label>Seu Nome Completo (Responsável)</label><input type="text" name="nome" required></div>
+                <div class="campo">
+                    <label>Espaço de Compras Desejado</label>
+                    <input type="text" name="localEvento" id="formLocalVisivel" readonly style="background: #f5f5f5; font-weight: bold; color: var(--cor-principal);">
+                </div>
+
+                <div class="campo"><label>Nome Completo do Responsável</label><input type="text" name="contato" required></div>
+                <div class="campo"><label>E-mail Comercial</label><input type="email" name="email" required></div>
                 <div class="campo"><label>Nome da sua Marca / Loja</label><input type="text" name="marca" required></div>
                 
                 <div class="campo">
@@ -100,79 +106,94 @@
                         <option value="Pastel">Pastel</option>
                         <option value="Frutas">Frutas</option>
                         <option value="Verduras e Legumes">Verduras e Legumes</option>
-                        <option value="Gastronomia">Gastronomia / Doces</option>
+                        <option value="Gastronomia / Doces">Gastronomia / Doces</option>
                         <option value="Moda e Acessórios">Moda e Acessórios</option>
                         <option value="Perfumaria e Beleza">Perfumaria e Beleza</option>
                         <option value="Artesanato">Artesanato</option>
                         <option value="Outros">Outros</option>
                     </select>
                 </div>
-                
-                <div class="campo"><label>Texto de Contato rápido (Ex: Falar com Cláudia)</label><input type="text" name="contato" placeholder="Ex: Falar com Maria" required></div>
-                <div class="campo"><label>WhatsApp Comercial (DDD+Número sem espaços)</label><input type="text" name="telefone" id="inputProfTel" required maxlength="11" placeholder="Ex: 11988887777"></div>
-                <div class="campo"><label>Instagram da Loja (Com ou sem @)</label><input type="text" name="instagram" placeholder="Ex: @sualoja"></div>
+
+                <div class="campo"><label>Descreva os produtos que envolvem sua marca</label><textarea name="descricao" rows="3" required placeholder="Ex: Doces gourmet, bolos caseiros e palha italiana..."></textarea></div>
+                <div class="campo"><label>WhatsApp Comercial (DDD+Número sem espaços)</label><input type="text" name="whatsapp" id="inputZap" required maxlength="11" placeholder="Ex: 11988887777"></div>
+                <div class="campo"><label>Instagram da Loja</label><input type="text" name="instagram" placeholder="Ex: @sualoja" required></div>
+                <div class="campo"><label>Facebook da Loja (Opcional)</label><input type="text" name="facebook" placeholder="Ex: facebook.com/sualoja"></div>
+                <div class="campo"><label>TikTok da Loja (Opcional)</label><input type="text" name="tiktok" placeholder="Ex: @sualojatiktok"></div>
+                <div class="campo"><label>Qual evento você já fez com a Cláudia Dib?</label><input type="text" name="eventoAnterior" placeholder="Se for o primeiro, digite: Nenhum" required></div>
                 
                 <div class="campo">
                     <label>Foto do Produto ou Logomarca</label>
                     <input type="file" name="fotoArquivo" id="fotoArquivo" accept="image/*" required>
                 </div>
                 
-                <button type="submit" class="btn-enviar" id="btnEnviar">Enviar para Aprovação</button>
+                <button type="submit" class="btn-enviar" id="btnEnviar">Enviar Inscrição</button>
             </form>
         </div>
     </div>
 </div>
 
-<img src="indique.png" alt="Participar" class="banner-final" onclick="if(telaAtual==='lista')alternarTela()">
-
 <div class="banner-protecao">
     <strong>© Cláudia Dib - Espaço de Compras</strong>
-    As publicações passam por moderação interna antes de serem exibidas.<br>
-    
-    <a href="https://wa.me/5511941688837?text=Olá Cláudia, preciso de ajuda com o Guia de Expositores." 
-       class="link-exclusao" target="_blank">
-        ℹ️ Suporte ou alteração de dados
-    </a>
+    As ativações e exibições no guia dependem da confirmação de participação no evento presencial.
 </div>
 
 <script>
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzi3MG1wxnCjsLDpPHI6dttMP2uRyHQnS3EDhNo5r5Dz0LHOTIQvpn81jbV3-m8BAwCOw/exec"; 
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbGmMZfPApXbJWvCw9YFfex6iTGPfP2YCIg3l6xAC6FH45YZe_odq0UXmFZYZUIG422Mw/exec"; 
     let dadosGerais = [];
-    let telaAtual = "lista";
+    let localSelecionado = "Ebusiness Park";
 
-    function alternarTela() {
-        const telaLista = document.getElementById('tela-lista');
-        const telaForm = document.getElementById('sessao-cadastro');
-        const btn = document.getElementById('btnTrocar');
-        const titulo = document.getElementById('titulo-pagina');
+    function mudarLocal(novoLocal, elemento) {
+        document.querySelectorAll('.btn-local').forEach(b => b.classList.remove('ativo'));
+        elemento.classList.add('ativo');
+        localSelecionado = novoLocal;
+        fecharFormulario();
+        filtrarEExibir();
+    }
 
-        if (telaAtual === "lista") {
-            telaLista.style.display = "none"; telaForm.style.display = "block";
-            btn.innerText = "⬅ VITRINE"; btn.classList.add('voltar');
-            titulo.innerText = "NOVO CADASTRO DE EXPOSITOR";
-            telaAtual = "cadastro";
-        } else {
-            telaLista.style.display = "block"; telaForm.style.display = "none";
-            btn.innerText = "➕ QUERO PARTICIPAR"; btn.classList.remove('voltar');
-            titulo.innerText = "GUIA ESPAÇO DE COMPRAS CLÁUDIA DIB";
-            telaAtual = "lista";
-        }
+    function abrirFormulario() {
+        document.getElementById('formLocalVisivel').value = localSelecionado;
+        document.getElementById('tela-lista').style.display = "none";
+        document.getElementById('sessao-cadastro').style.display = "block";
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function fecharFormulario() {
+        document.getElementById('tela-lista').style.display = "block";
+        document.getElementById('sessao-cadastro').style.display = "none";
     }
 
     async function buscarDados() {
         try {
             const res = await fetch(URL_SCRIPT);
             dadosGerais = await res.json();
-            renderizar(dadosGerais); 
-            gerarFiltros(dadosGerais);
-        } catch (e) { document.getElementById('msg-vazio').innerText = "Nenhum expositor aprovado no momento."; }
+            filtrarEExibir();
+        } catch (e) { 
+            // Se der erro ou voltar vazio (nenhum SIM na planilha inteira), exibe o modo captação/inscrição
+            filtrarEExibir();
+        }
     }
 
-    function renderizar(dados) {
+    function filtrarEExibir() {
         const corpo = document.getElementById('lista-corpo');
-        if(!dados || dados.length === 0) { corpo.innerHTML = '<div id="msg-vazio" style="grid-column: 1/-1;">Nenhum expositor ativo no momento.</div>'; return; }
         
-        corpo.innerHTML = dados.map(item => {
+        // Filtra os dados da planilha pelo local ativo
+        const filtrados = dadosGerais.filter(i => i.localEvento === localSelecionado);
+        
+        // SE NÃO HOUVER EXPOSITOR ATIVO COM "SIM" NAQUELE LOCAL
+        if (filtrados.length === 0) {
+            corpo.innerHTML = `
+                <div class="aviso-evento-breve">
+                    <h3>🏛️ ${localSelecionado}</h3>
+                    <p>📢 <strong>EM BREVE NOVO EVENTO!</strong></p>
+                    <p>As inscrições de expositores para a próxima edição neste local já estão abertas.</p>
+                    <button class="btn-abrir-form" onclick="abrirFormulario()">Quero Participar ➕</button>
+                </div>
+            `;
+            return;
+        }
+        
+        // SE HOUVER EXPOSITORES ATIVOS, MONTA OS CARDS SEGUINDO A SUA SEQUÊNCIA EXATA
+        corpo.innerHTML = filtrados.map(item => {
             let urlFoto = item.foto || "";
             if (urlFoto.includes('drive.google.com')) {
                 const match = urlFoto.match(/[-\w]{25,}/);
@@ -191,7 +212,8 @@
                     <div class="detalhes-expositor">
                         <span class="segmento-tag">🛍️ ${item.segmento || "Geral"}</span>
                         <h3 class="marca-titulo">${item.marca || "Expositor"}</h3>
-                        <p class="responsavel-nome">${item.contato || item.nome}</p>
+                        <p class="responsavel-nome">👤 Por: ${item.contato}</p>
+                        
                         <div class="botoes-contato">
                             <a href="${item.whatsapp}" class="btn-rede btn-zap" target="_blank">📱 WhatsApp</a>
                             ${botaoInsta}
@@ -200,24 +222,17 @@
                 </div>
             `;
         }).join('');
+        
+        // Adiciona um botão discreto de inscrição caso o evento tenha expositores mas outra pessoa queira se inscrever
+        corpo.innerHTML += `
+            <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
+                <button class="btn-abrir-form" style="background: var(--cor-principal);" onclick="abrirFormulario()">Quero expor neste local ➕</button>
+            </div>
+        `;
     }
 
-    function filtrar(seg, elemento) {
-        document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('ativo'));
-        elemento.classList.add('ativo');
-        renderizar(seg === 'Todos' ? dadosGerais : dadosGerais.filter(i => i.segmento === seg));
-    }
-
-    function gerarFiltros(dados) {
-        if(!dados) return;
-        const segmentos = [...new Set(dados.map(i => i.segmento).filter(Boolean))].sort();
-        const btnF = document.getElementById('botoesFiltros');
-        btnF.innerHTML = '<button class="btn-filtro ativo" onclick="filtrar(\'Todos\', this)">Todos</button>';
-        segmentos.forEach(s => btnF.innerHTML += `<button class="btn-filtro" onclick="filtrar('${s}', this)">${s}</button>`);
-    }
-
-    const inputTel = document.getElementById('inputProfTel');
-    if(inputTel) inputTel.addEventListener('input', function(e) { this.value = this.value.replace(/\D/g, ''); });
+    const inputZap = document.getElementById('inputZap');
+    if(inputZap) inputZap.addEventListener('input', function(e) { this.value = this.value.replace(/\D/g, ''); });
 
     document.getElementById('formIndicar').onsubmit = async (e) => {
         e.preventDefault();
@@ -235,13 +250,22 @@
             const base64Data = reader.result.split(',')[1];
             const formData = new FormData(e.target);
             
+            // Pega a data atual de hoje para salvar na planilha automaticamente
+            const dataHoje = new Date().toLocaleDateString('pt-BR');
+            
             const objeto = {
-                nome: formData.get('nome'),
+                contato: formData.get('contato'),
+                email: formData.get('email'),
                 marca: formData.get('marca'),
                 segmento: formData.get('segmento'),
-                contato: formData.get('contato'),
-                telefone: formData.get('telefone'),
+                descricao: formData.get('descricao'),
+                whatsapp: formData.get('whatsapp'),
                 instagram: formData.get('instagram'),
+                facebook: formData.get('facebook'),
+                tiktok: formData.get('tiktok'),
+                eventoAnterior: formData.get('eventoAnterior'),
+                localEvento: localSelecionado, // Passa o local que estava ativo no topo
+                dataEvento: dataHoje, // Salva o dia da inscrição na coluna M
                 arquivoData: base64Data,
                 arquivoNome: file.name,
                 arquivoMime: file.type
@@ -252,12 +276,13 @@
                 document.getElementById('conteudo-form').innerHTML = `
                     <div style="text-align: center; padding: 30px;">
                         <div style="font-size: 40px;">🎉</div>
-                        <h2 style="color: var(--cor-principal);">Enviado para Análise!</h2>
-                        <p>Seus dados e foto foram enviados. Assim que a Cláudia aprovar na planilha, sua marca aparecerá na Vitrine!</p>
+                        <h2 style="color: var(--cor-principal);">Inscrição Recebida!</h2>
+                        <p>Seus dados e sua foto foram enviados com sucesso para a análise da Cláudia Dib.</p>
+                        <p style="font-size:13px; color:#666;">Assim que a confirmação for realizada na planilha, sua marca subirá para a vitrine do evento!</p>
                         <button onclick="location.reload()" class="btn-enviar">VOLTAR PARA A VITRINE</button>
                     </div>
                 `;
-            } catch (err) { alert("Erro ao enviar dados."); btn.innerText = "Enviar para Aprovação"; btn.disabled = false; }
+            } catch (err) { alert("Erro ao enviar dados."); btn.innerText = "Enviar Inscrição"; btn.disabled = false; }
         };
     };
 
