@@ -1,1 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Vizinhos - Jd Maria Rosa</title>
+    <style>
+        :root { --azul: #004a99; --azul-claro: #f0f4f8; --verde: #25d366; --borda: #e1e8ed; --cinza-protecao: #f8f9fa; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: transparent; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        .container-guia { background: white; border-radius: 8px; overflow: hidden; border: 1px solid var(--borda); margin-bottom: 20px; flex-grow: 1; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
 
+        .acoes-topo { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #fff; border-bottom: 2px solid var(--azul-claro); }
+        .btn-toggle { background: var(--azul); color: white; border: none; padding: 10px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 10px; text-transform: uppercase; transition: 0.3s; }
+        .btn-toggle.voltar { background: #666; }
+
+        .filtros { display: flex; overflow-x: auto; padding: 12px; gap: 8px; background: #fafafa; border-bottom: 1px solid var(--borda); scrollbar-width: none; }
+        .btn-filtro { background: #fff; border: 1px solid var(--borda); padding: 7px 14px; border-radius: 15px; white-space: nowrap; cursor: pointer; color: var(--azul); font-weight: bold; font-size: 11px; text-transform: uppercase; }
+        .btn-filtro.ativo { background: var(--azul); color: white; border-color: var(--azul); }
+
+        .linha-profissional { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid var(--borda); }
+        .info { display: flex; align-items: center; gap: 20px; flex: 1; }
+        .cat-texto { font-size: 14px; font-weight: 800; color: var(--azul); min-width: 140px; text-transform: uppercase; }
+        .nome-texto { font-size: 14px; font-weight: 600; }
+
+        .btn-zap-link { background: var(--verde); color: white; text-decoration: none; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; }
+
+        #sessao-cadastro { display: none; padding: 20px; max-width: 500px; margin: 0 auto; }
+        .aviso-privacidade { background: #fff4f4; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #ffebeb; font-size: 11px; color: #cc0000; }
+        .campo { margin-bottom: 12px; }
+        .campo label { display: block; font-weight: bold; font-size: 11px; margin-bottom: 4px; color: #444; }
+        .campo input, .campo select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
+        .btn-enviar { width: 100%; background: var(--verde); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-top: 10px; }
+
+        .banner-final { width: 100%; max-width: 800px; margin: 10px auto; display: block; border-radius: 8px; cursor: pointer; }
+
+        .banner-protecao { background: var(--cinza-protecao); border-top: 1px solid var(--borda); padding: 15px 25px; text-align: center; font-size: 10px; color: #777; line-height: 1.4; margin-top: auto; }
+        .banner-protecao strong { color: var(--azul); display: block; margin-bottom: 3px; }
+        .link-exclusao { display: inline-block; margin-top: 8px; color: var(--azul); text-decoration: none; cursor: pointer; font-weight: bold; font-size: 11px; }
+
+        @media (max-width: 600px) {
+            .info { flex-direction: column; align-items: flex-start; gap: 2px; }
+            .cat-texto { font-size: 10px; min-width: auto; }
+            .btn-zap-link span { display: none; }
+            #titulo-pagina { font-size: 9px; line-height: 1.2; padding-right: 5px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-guia">
+    <div class="acoes-topo">
+        <strong id="titulo-pagina" style="color: var(--azul)">GUIA DE VIZINHOS</strong>
+        <button id="btnTrocar" class="btn-toggle" onclick="alternarTela()">➕ INDICAR NOVO</button>
+    </div>
+
+    <div id="tela-lista">
+        <div class="filtros" id="botoesFiltros">
+            <button class="btn-filtro ativo" onclick="filtrar('Todos', this)">Todos</button>
+        </div>
+        <div id="lista-corpo"><div id="msg-vazio">Carregando guia comunitário...</div></div>
+    </div>
+
+    <div id="sessao-cadastro">
+        <div id="conteudo-form">
+            <form id="formIndicar">
+                <div class="aviso-privacidade">
+                    <strong>SEGURANÇA:</strong> Seus dados de contato (nome e seu zap) são para controle interno da Cláudia e <strong>não</strong> serão publicados.
+                </div>
+                
+                <div class="campo"><label>Seu Nome (Morador)</label><input type="text" name="morador" required></div>
+                <div class="campo"><label>Seu Apto/Bloco</label><input type="text" name="apartamento" required></div>
+                <div class="campo"><label>Seu WhatsApp (Para validação interna)</label><input type="text" name="seuTelefone" id="inputMeuTel" required maxlength="11" placeholder="Ex: 11988887777"></div>
+
+                <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
+
+                <div class="campo">
+                    <label>Categoria do Profissional</label>
+                    <select name="profissional" required>
+                        <option value="">Selecione...</option>
+                        <option value="Azulejista">Azulejista</option>
+                        <option value="Chaveiro">Chaveiro</option>
+                        <option value="Costureira">Costureira</option>
+                        <option value="Eletricista">Eletricista</option>
+                        <option value="Encanador">Encanador</option>
+                        <option value="Faxineira">Faxineira</option>
+                        <option value="Marido de Aluguel">Marido de Aluguel</option>
+                        <option value="Pintor">Pintor</option>
+                        <option value="Uber / Transporte">Uber / Transporte</option>
+                    </select>
+                </div>
+                <div class="campo"><label>Nome do Profissional</label><input type="text" name="nomeProfissional" required></div>
+                <div class="campo"><label>WhatsApp do Profissional (DDD+Número)</label><input type="text" name="telefone" id="inputProfTel" required maxlength="11" placeholder="Ex: 11988887777"></div>
+                <button type="submit" class="btn-enviar" id="btnEnviar">Publicar no Guia</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<img src="indique.png" alt="Indique" class="banner-final" onclick="if(telaAtual==='lista')alternarTela()">
+
+<div class="banner-protecao">
+    <strong>© Cláudia Oliveira - Guia Colaborativo Jd Maria Rosa</strong>
+    Iniciativa sem fins lucrativos. As indicações são de inteira responsabilidade dos moradores. Não garantimos a veracidade dos dados. Reservamo-nos o direito de excluir qualquer contato sem aviso prévio. Proibida a venda.<br>
+    
+    <a href="https://wa.me/5511951392684?text=Olá Claudia, gostaria de solicitar a exclusão de um contato no Guia Maria Rosa." 
+       class="link-exclusao" target="_blank">
+       ℹ️ Solicitar exclusão de número
+    </a>
+</div>
+
+<script>
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwIiiSuQ5vnRbJfh01F1t8XkYvmNXfPaSyH9eZTN4zECcQ_JfYAHdyy2FAR9yqJxhto/exec"; 
+    let dadosGerais = [];
+    let telaAtual = "lista";
+
+    function alternarTela() {
+        const telaLista = document.getElementById('tela-lista');
+        const telaForm = document.getElementById('sessao-cadastro');
+        const btn = document.getElementById('btnTrocar');
+        const titulo = document.getElementById('titulo-pagina');
+
+        if (telaAtual === "lista") {
+            telaLista.style.display = "none"; telaForm.style.display = "block";
+            btn.innerText = "⬅ VOLTAR"; btn.classList.add('voltar');
+            titulo.innerText = "NOVA INDICAÇÃO DO MORADOR DO COND. JARDIM MARIA ROSA";
+            telaAtual = "cadastro";
+        } else {
+            telaLista.style.display = "block"; telaForm.style.display = "none";
+            btn.innerText = "➕ INDICAR NOVO"; btn.classList.remove('voltar');
+            titulo.innerText = "GUIA DE VIZINHOS";
+            telaAtual = "lista";
+        }
+    }
+
+    async function buscarDados() {
+        try {
+            const res = await fetch(URL_SCRIPT);
+            const rawData = await res.json();
+            dadosGerais = rawData.filter(i => i.Categoria && i.Contato).sort((a, b) => a.Categoria.localeCompare(b.Categoria));
+            renderizar(dadosGerais); gerarFiltros(dadosGerais);
+        } catch (e) { document.getElementById('msg-vazio').innerText = "Erro ao carregar guia."; }
+    }
+
+    function renderizar(dados) {
+        const corpo = document.getElementById('lista-corpo');
+        if(dados.length === 0) { corpo.innerHTML = '<div id="msg-vazio">Nenhum profissional cadastrado.</div>'; return; }
+        corpo.innerHTML = dados.map(item => `
+            <div class="linha-profissional">
+                <div class="info">
+                    <span class="cat-texto">${item.Categoria}</span>
+                    <span class="nome-texto">${item.Contato}</span>
+                </div>
+                <a href="https://wa.me/55${item.Telefone.replace(/\D/g,'')}" class="btn-zap-link" target="_blank">📱 <span>WhatsApp</span></a>
+            </div>
+        `).join('');
+    }
+
+    function filtrar(cat, elemento) {
+        document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('ativo'));
+        elemento.classList.add('ativo');
+        renderizar(cat === 'Todos' ? dadosGerais : dadosGerais.filter(i => i.Categoria === cat));
+    }
+
+    function gerarFiltros(dados) {
+        const cats = [...new Set(dados.map(i => i.Categoria))].sort();
+        const btnF = document.getElementById('botoesFiltros');
+        btnF.innerHTML = '<button class="btn-filtro ativo" onclick="filtrar(\'Todos\', this)">Todos</button>';
+        cats.forEach(c => btnF.innerHTML += `<button class="btn-filtro" onclick="filtrar('${c}', this)">${c}</button>`);
+    }
+
+    [document.getElementById('inputMeuTel'), document.getElementById('inputProfTel')].forEach(el => {
+        if(el) el.addEventListener('input', function(e) { this.value = this.value.replace(/\D/g, ''); });
+    });
+
+    document.getElementById('formIndicar').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnEnviar');
+        btn.innerText = "Processando..."; btn.disabled = true;
+        
+        const formData = new FormData(e.target);
+        const objeto = {
+            morador: formData.get('morador'),
+            apartamento: formData.get('apartamento'),
+            seuTelefone: formData.get('seuTelefone'),
+            profissional: formData.get('profissional'),
+            nomeProfissional: formData.get('nomeProfissional'),
+            telefone: formData.get('telefone')
+        };
+        
+        try {
+            await fetch(URL_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(objeto) });
+            document.getElementById('conteudo-form').innerHTML = `
+                <div style="text-align: center; padding: 30px;">
+                    <div style="font-size: 40px;">✅</div>
+                    <h2 style="color: var(--azul);">Sucesso!</h2>
+                    <p>Sua indicação foi enviada para o Guia Maria Rosa.</p>
+                    <button onclick="location.reload()" class="btn-enviar" style="background: var(--azul);">VOLTAR</button>
+                </div>
+            `;
+        } catch (err) { alert("Erro ao enviar."); btn.innerText = "Publicar no Guia"; btn.disabled = false; }
+    };
+
+    buscarDados();
+</script>
+</body>
+</html>
