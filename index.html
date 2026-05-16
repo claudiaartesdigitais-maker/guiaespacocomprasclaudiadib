@@ -145,8 +145,8 @@
 </div>
 
 <script>
-    // Link definitivo fornecido por você
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwgiT07h55wbT-wWcs8k3fV67g7eV42QLg1d-ZhcQ-1NzPntjlOXLo8DJUahXN_mPth/exec"; 
+    // URL Atualizada com o seu link definitivo do Apps Script
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxtXYpPvQnSA2gSZ9tgAM3KR2u95wAYlTSz-aYaMbiMqrjvJ5fP2kv1JC6Y8k8-E4zsOA/exec"; 
     
     let dadosGerais = [];
     let proximasDatas = {};
@@ -192,8 +192,7 @@
         if (partes.length === 3) {
             return new Date(partes[2], partes[1] - 1, partes[0]);
         }
-        const dataTenta = new Date(stringData);
-        return isNaN(dataTenta.getTime()) ? null : dataTenta;
+        return null;
     }
 
     function filtrarEExibir() {
@@ -211,15 +210,21 @@
             let hoje = new Date();
             hoje.setHours(0,0,0,0);
 
-            // Se existir uma primeira data válida no painel de controle e for futura
+            // Verifica se a primeira data existe e está no futuro/presente
             if (dataPrincipalStr && dataEventoObj && dataEventoObj >= hoje) {
                 
                 let textoPeriodo = dataPrincipalStr;
                 
-                if (colunasDeData.length === 2) {
-                    textoPeriodo = `${colunasDeData[0]} e ${colunasDeData[1]}`;
-                } else if (colunasDeData.length >= 3) {
-                    textoPeriodo = `${colunasDeData[0]}, ${colunasDeData[1]} e ${colunasDeData[2]}`;
+                // CRIA O FORMATO RESUMIDO "25/05 a 27/05/2026"
+                if (colunasDeData.length >= 2) {
+                    const primeiraData = colunasDeData[0]; // Ex: 25/05/2026
+                    const ultimaData = colunasDeData[colunasDeData.length - 1]; // Ex: 27/05/2026
+                    
+                    // Extrai apenas o Dia/Mês da primeira data
+                    const partesPrimeira = primeiraData.split('/');
+                    const diaMesPrimeira = `${partesPrimeira[0]}/${partesPrimeira[1]}`;
+                    
+                    textoPeriodo = `${diaMesPrimeira} a ${ultimaData}`;
                 }
 
                 corpo.innerHTML = `
@@ -231,7 +236,7 @@
                     </div>
                 `;
             } else {
-                // Mensagem amigável em Português do Brasil se o prazo expirou ou está sem data
+                // Mensagem padrão caso a data principal já tenha passado
                 corpo.innerHTML = `
                     <div class="aviso-evento-breve">
                         <h3>🏛️ ${localSelecionado}</h3>
@@ -326,7 +331,7 @@
                         <div style="font-size: 40px;">🎉</div>
                         <h2 style="color: var(--cor-principal);">Inscrição Recebida!</h2>
                         <p>Seus dados e sua foto foram enviados com sucesso para a análise da Cláudia Dib.</p>
-                        <p style="font-size:13px; color:#666;">Assim que a confirmação for realizada na planilha, sua marca subirá para a vitrine do evento!</p>
+                        <p style="font-size:13px; color:#666;">Assim que a confirmação for realizada na planilha, sua marca subirá para a vitrine do event!</p>
                         <button onclick="location.reload()" class="btn-enviar">VOLTAR PARA A VITRINE</button>
                     </div>
                 `;
