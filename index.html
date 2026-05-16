@@ -101,16 +101,23 @@
                 <div class="campo">
                     <label>Segmento de Atuação</label>
                     <select name="segmento" required>
-                        <option value="">Selecione...</option>
-                        <option value="Caldo de Cana">Caldo de Cana</option>
-                        <option value="Pastel">Pastel</option>
-                        <option value="Frutas">Frutas</option>
-                        <option value="Verduras e Legumes">Verduras e Legumes</option>
-                        <option value="Gastronomia / Doces">Gastronomia / Doces</option>
-                        <option value="Moda e Acessórios">Moda e Acessórios</option>
-                        <option value="Perfumaria e Beleza">Perfumaria e Beleza</option>
-                        <option value="Artesanato">Artesanato</option>
-                        <option value="Outros">Outros</option>
+                        <option value="">Selecione o seu segmento...</option>
+                        <option value="Artesanato & Decor">Artesanato & Decoração</option>
+                        <option value="Caldo de Cana & Pastel">Caldo de Cana & Pastel</option>
+                        <option value="Calçados & Bolsas">Calçados & Bolsas</option>
+                        <option value="Cosméticos & Maquiagem">Cosméticos & Maquiagem</option>
+                        <option value="Doces & Confeitaria">Doces & Confeitaria Gourmet</option>
+                        <option value="Frutas & Hortifruti">Frutas, Verduras e Legumes</option>
+                        <option value="Gastronomia & Lanches">Gastronomia / Lanches / Salgados</option>
+                        <option value="Moda Feminina">Moda Feminina</option>
+                        <option value="Moda Masculina">Moda Masculina</option>
+                        <option value="Moda Infantil & Kids">Moda Infantil & Kids</option>
+                        <option value="Moda Íntima & Pijamas">Moda Íntima & Pijamas</option>
+                        <option value="Acessórios & Semijoias">Acessórios, Joias & Semijoias</option>
+                        <option value="Perfumaria & Aromas">Perfumaria, Essências & Aromas</option>
+                        <option value="Pet Shop & Acessórios">Produtos para Pets</option>
+                        <option value="Queijos, Vinhos & Embutidos">Queijos, Vinhos & Sabores Regionais</option>
+                        <option value="Outros">Outros Segmentos</option>
                     </select>
                 </div>
 
@@ -138,7 +145,7 @@
 </div>
 
 <script>
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbGmMZfPApXbJWvCw9YFfex6iTGPfP2YCIg3l6xAC6FH45YZe_odq0UXmFZYZUIG422Mw/exec"; 
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxGmMZfPApXbJWvCw9YFfex6iTGPfP2YCIg3l6xAC6FH45YZe_odq0UXmFZYZUIG422Mw/exec"; 
     let dadosGerais = [];
     let localSelecionado = "Ebusiness Park";
 
@@ -168,31 +175,58 @@
             dadosGerais = await res.json();
             filtrarEExibir();
         } catch (e) { 
-            // Se der erro ou voltar vazio (nenhum SIM na planilha inteira), exibe o modo captação/inscrição
             filtrarEExibir();
         }
     }
 
+    function converterData(stringData) {
+        if (!stringData) return null;
+        // Tenta decodificar o formato de data vindo do Google (ISO ou padrão BR)
+        const partes = stringData.split('/');
+        if (partes.length === 3) {
+            return new Date(partes[2], partes[1] - 1, partes[0]);
+        }
+        const dataTenta = new Date(stringData);
+        return isNaN(dataTenta.getTime()) ? null : dataTenta;
+    }
+
     function filtrarEExibir() {
         const corpo = document.getElementById('lista-corpo');
-        
-        // Filtra os dados da planilha pelo local ativo
         const filtrados = dadosGerais.filter(i => i.localEvento === localSelecionado);
         
-        // SE NÃO HOUVER EXPOSITOR ATIVO COM "SIM" NAQUELE LOCAL
+        // SE NÃO HOUVER EXPOSITOR ATIVO COM "SIM"
         if (filtrados.length === 0) {
-            corpo.innerHTML = `
-                <div class="aviso-evento-breve">
-                    <h3>🏛️ ${localSelecionado}</h3>
-                    <p>📢 <strong>EM BREVE NOVO EVENTO!</strong></p>
-                    <p>As inscrições de expositores para a próxima edição neste local já estão abertas.</p>
-                    <button class="btn-abrir-form" onclick="abrirFormulario()">Quero Participar ➕</button>
-                </div>
-            `;
+            // Busca se existe alguma linha desse local que tenha uma data preenchida
+            const linhaComData = dadosGerais.find(i => i.localEvento === localSelecionado && i.dataEvento);
+            let dataEventoObj = linhaComData ? converterData(linhaComData.dataEvento) : null;
+            let hoje = new Date();
+            hoje.setHours(0,0,0,0);
+
+            // Se tiver uma data futura cadastrada na Coluna M
+            if (dataEventoObj && dataEventoObj >= hoje) {
+                const dataFormatada = linhaComData.dataEvento;
+                corpo.innerHTML = `
+                    <div class="aviso-evento-breve">
+                        <h3>🏛️ ${localSelecionado}</h3>
+                        <p>📅 <strong>PRÓXIMO EVENTO: ${dataFormatada}</strong></p>
+                        <p>As inscrições de expositores para esta nova edição já estão abertas!</p>
+                        <button class="btn-abrir-form" onclick="abrirFormulario()">Quero Participar ➕</button>
+                    </div>
+                `;
+            } else {
+                // Se a data estiver vazia ou for antiga (Evento encerrado e sem nova data)
+                corpo.innerHTML = `
+                    <div class="aviso-evento-breve">
+                        <h3>🏛️ ${localSelecionado}</h3>
+                        <p>📢 <strong>EM BREVE NOVO EVENTO!</strong></p>
+                        <p>Estamos a preparar a próxima edição deste espaço. Acompanhe as nossas redes sociais para saber as próximas datas em primeira mão!</p>
+                    </div>
+                `;
+            }
             return;
         }
         
-        // SE HOUVER EXPOSITORES ATIVOS, MONTA OS CARDS SEGUINDO A SUA SEQUÊNCIA EXATA
+        // SE HOUVER EXPOSITORES ATIVOS COM "SIM", EXIBE OS CARDS
         corpo.innerHTML = filtrados.map(item => {
             let urlFoto = item.foto || "";
             if (urlFoto.includes('drive.google.com')) {
@@ -223,7 +257,6 @@
             `;
         }).join('');
         
-        // Adiciona um botão discreto de inscrição caso o evento tenha expositores mas outra pessoa queira se inscrever
         corpo.innerHTML += `
             <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
                 <button class="btn-abrir-form" style="background: var(--cor-principal);" onclick="abrirFormulario()">Quero expor neste local ➕</button>
@@ -249,8 +282,6 @@
         reader.onload = async function () {
             const base64Data = reader.result.split(',')[1];
             const formData = new FormData(e.target);
-            
-            // Pega a data atual de hoje para salvar na planilha automaticamente
             const dataHoje = new Date().toLocaleDateString('pt-BR');
             
             const objeto = {
@@ -264,8 +295,8 @@
                 facebook: formData.get('facebook'),
                 tiktok: formData.get('tiktok'),
                 eventoAnterior: formData.get('eventoAnterior'),
-                localEvento: localSelecionado, // Passa o local que estava ativo no topo
-                dataEvento: dataHoje, // Salva o dia da inscrição na coluna M
+                localEvento: localSelecionado,
+                dataEvento: dataHoje,
                 arquivoData: base64Data,
                 arquivoNome: file.name,
                 arquivoMime: file.type
