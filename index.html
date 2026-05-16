@@ -141,11 +141,10 @@
 
 <div class="banner-protecao">
     <strong>© Cláudia Dib - Espaço de Compras</strong>
-    As ativações e exibições no guia dependem da confirmation de participação no evento presencial.
+    As ativações e exibições no guia dependem da confirmação de participação no evento presencial.
 </div>
 
 <script>
-    // URL Atualizada com o teu novo link do Apps Script
     const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwKGmcM-912OnU3ZzKtW8iNL5Cy655vnUGHbtygRIeYcwHTSKWGtpeTliZKTH1zZTvfmg/exec"; 
     
     let dadosGerais = [];
@@ -177,7 +176,6 @@
             const res = await fetch(URL_SCRIPT);
             const pacoteData = await res.json();
             
-            // Separa os expositores e o painel de datas que vêm do novo script
             dadosGerais = pacoteData.expositores || [];
             proximasDatas = pacoteData.proximasDatas || {};
             
@@ -203,29 +201,49 @@
         
         // SE NÃO HOUVER EXPOSITOR ATIVO COM "SIM" NESTE LOCAL
         if (filtrados.length === 0) {
-            // Pega a data correspondente a este local na aba "Eventos" (Aba 2)
-            const dataString = proximasDatas[localSelecionado] || "";
-            let dataEventoObj = converterData(dataString);
+            // Pega o texto bruto guardado no painel de datas para este local
+            const dadosDataBrutos = proximasDatas[localSelecionado] || "";
+            
+            // Separa as datas pelas vírgulas (Ex: "25/05/2026, 26/05/2026, 27/05/2026")
+            const colunasDeData = dadosDataBrutos.split(',').map(d => d.trim()).filter(d => d !== "");
+            
+            // A Coluna B será sempre o primeiro item do array
+            const dataPrincipalStr = colunasDeData[0] || "";
+            let dataEventoObj = converterData(dataPrincipalStr);
+            
             let hoje = new Date();
             hoje.setHours(0,0,0,0);
 
-            // Se existir uma data futura configurada na aba Eventos
-            if (dataString && dataEventoObj && dataEventoObj >= hoje) {
-                corpo.innerHTML = `
+            // Se existir uma primeira data válida e ela for no futuro
+            if (dataPrincipalStr && dataEventoObj && dataEventoObj >= hoje) {
+                
+                // LÓGICA DE MONTAGEM DO PERÍODO POR EXTENSO
+                let textoPeriodo = dataPrincipalStr;
+                
+                if (colunasDeData.length === 2) {
+                    // Se tiver 2 dias: "25/05/2026 e 26/05/2026"
+                    textoPeriodo = `${colunasDeData[0]} e ${colunasDeData[1]}`;
+                } else if (colunasDeData.length >= 3) {
+                    // Se tiver 3 dias: "25/05/2026, 26/05/2026 e 27/05/2026"
+                    textoPeriodo = `${colunasDeData[0]}, ${colunasDeData[1]} e ${colunasDeData[2]}`;
+                }
+
+                corpeHTML = `
                     <div class="aviso-evento-breve">
                         <h3>🏛️ ${localSelecionado}</h3>
-                        <p>📅 <strong>PRÓXIMO EVENTO: ${dataString}</strong></p>
+                        <p>📅 <strong>PRÓXIMO EVENTO: ${textoPeriodo}</strong></p>
                         <p>As inscrições de expositores para esta nova edição já estão abertas!</p>
                         <button class="btn-abrir-form" onclick="abrirFormulario()">Quero Participar ➕</button>
                     </div>
                 `;
+                corpo.innerHTML = corpeHTML;
             } else {
-                // Se a data estiver em branco ou já passou
+                // Se a primeira data já passou ou está em branco
                 corpo.innerHTML = `
                     <div class="aviso-evento-breve">
                         <h3>🏛️ ${localSelecionado}</h3>
                         <p>📢 <strong>EM BREVE NOVO EVENTO!</strong></p>
-                        <p>Estamos a preparar a próxima edição deste espaço. Acompanhe as nossas redes sociais para saber as próximas datas em primeira mão!</p>
+                        <p>Estamos preparando a próxima edição deste espaço. Acompanhe as nossas redes sociais para saber as próximas datas em primeira mão!</p>
                     </div>
                 `;
             }
@@ -263,7 +281,6 @@
             `;
         }).join('');
         
-        // Botão de rodapé para novos cadastros
         corpo.innerHTML += `
             <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
                 <button class="btn-abrir-form" style="background: var(--cor-principal);" onclick="abrirFormulario()">Quero expor neste local ➕</button>
