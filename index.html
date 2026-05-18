@@ -2,326 +2,344 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Guia Espaço Compras</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Espaço de Compras Cláudia Dib</title>
     <style>
-        /* ESTILOS GERAIS */
-        body, html { margin: 0; padding: 0; background: #f8f9fa; font-family: 'Segoe UI', Roboto, sans-serif; overflow-x: hidden; color: #333; }
+        :root { 
+            --cor-principal: #673ab7; 
+            --cor-secundaria: #9c27b0; 
+            --fundo-claro: #fcfaff; 
+            --verde-zap: #25d366; 
+            --insta-cor: #e1306c;
+            --borda: #f0e6ff; 
+            --cinza-protecao: #f8f9fa; 
+        }
         
-        /* TOPO / NAVEGAÇÃO */
-        .topo-container { background: #ffffff; padding: 15px 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 15px; position: sticky; top: 0; z-index: 100; }
-        .logo-area { font-size: 20px; font-weight: 800; color: #0056e3; text-transform: uppercase; letter-spacing: 0.5px; }
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: #fafafa; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
         
-        .menu-locais { display: flex; gap: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 5px; }
-        .menu-locais::-webkit-scrollbar { display: none; }
-        .btn-local { background: #eee; border: none; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s; color: #555; }
-        .btn-local.ativo { background: #0056e3; color: white; }
+        .container-guia { background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--borda); margin: 15px; flex-grow: 1; box-shadow: 0 4px 15px rgba(103, 58, 183, 0.08); }
 
-        /* BLOCO DE PERÍODO / INFOS DO LOCAL */
-        .banner-info { background: #ffffff; margin: 15px 20px; padding: 15px 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border-left: 5px solid #0056e3; }
-        .banner-info h2 { margin: 0 0 5px 0; font-size: 18px; color: #111; }
-        .banner-info p { margin: 0; font-size: 14px; color: #666; font-weight: 500; }
+        .header-locais { background: #fff; border-bottom: 2px solid var(--fundo-claro); padding: 15px; text-align: center; }
+        .header-locais h2 { margin: 0 0 12px 0; font-size: 16px; color: var(--cor-principal); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .abas-locais { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .btn-local { background: #fff; border: 2px solid var(--borda); padding: 10px 18px; border-radius: 25px; cursor: pointer; color: var(--cor-principal); font-weight: bold; font-size: 12px; text-transform: uppercase; transition: 0.3s; }
+        .btn-local.ativo { background: var(--cor-principal); color: white; border-color: var(--cor-principal); box-shadow: 0 4px 10px rgba(103, 58, 183, 0.3); }
 
-        /* VITRINE DE EXPOSITORES */
-        .mural-titulo { padding: 10px 20px; font-size: 18px; font-weight: 800; color: #111; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
-        .mural-titulo::before { content: ''; width: 4px; height: 18px; background: #0056e3; border-radius: 2px; }
+        /* Mosaico de Cards */
+        .grade-expositores { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
+        .card-expositor { background: white; border-radius: 12px; border: 1px solid var(--borda); overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; transition: 0.3s; }
+        .card-expositor:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(103, 58, 183, 0.1); }
         
-        .grid-expositores { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 10px 20px 30px 20px; }
+        .foto-expositor { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: #f5f5f5; border-bottom: 1px solid var(--borda); }
         
-        /* CARD EXPOSITOR */
-        .card-expositor { background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); border: 1px solid #eee; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s; }
-        .card-expositor:active { transform: scale(0.99); }
-        .thumb-expositor { width: 100%; height: 180px; background: #f0f0f0; overflow: hidden; position: relative; }
-        .thumb-expositor img { width: 100%; height: 100%; object-fit: cover; }
+        .detalhes-expositor { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .segmento-tag { font-size: 11px; font-weight: 800; color: var(--cor-secundaria); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .marca-titulo { font-size: 19px; font-weight: 700; color: #222; margin: 0 0 4px 0; text-transform: uppercase; }
+        .responsavel-nome { font-size: 13px; color: #666; margin: 0 0 15px 0; font-weight: 500; }
         
-        .corpo-expositor { padding: 15px; display: flex; flex-direction: column; flex-grow: 1; }
-        .segmento-tag { font-size: 10px; color: #0056e3; background: #e6efff; font-weight: 800; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; width: fit-content; margin-bottom: 8px; }
-        .marca-titulo { font-size: 17px; font-weight: 700; margin: 0 0 8px 0; color: #111; }
-        .descricao-texto { font-size: 13px; color: #666; line-height: 1.4; margin: 0 0 15px 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex-grow: 1; }
-        
-        .contatos-container { display: flex; gap: 10px; }
-        .btn-contato { flex: 1; text-align: center; padding: 8px 0; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; text-transform: uppercase; }
-        .btn-zap { background: #25d366; color: white; }
-        .btn-insta { background: #f09433; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; }
+        .botoes-contato { display: flex; gap: 10px; margin-top: auto; }
+        .btn-rede { flex: 1; text-align: center; text-decoration: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.2s; }
+        .btn-rede:hover { opacity: 0.9; }
+        .btn-zap { background: var(--verde-zap); }
+        .btn-insta { background: var(--insta-cor); }
 
-        /* BOTÃO FLUTUANTE */
-        .btn-flutuante { position: fixed; bottom: 20px; right: 20px; background: #0056e3; color: white; padding: 12px 20px; border-radius: 30px; font-weight: 700; font-size: 14px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,86,227,0.4); z-index: 90; display: flex; align-items: center; gap: 6px; }
+        /* Mensagem de Evento Breve / Inscrições */
+        .aviso-evento-breve { grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: #fdfaff; border: 2px dashed var(--borda); border-radius: 12px; margin: 10px 20px; }
+        .aviso-evento-breve h3 { margin: 0 0 8px 0; color: var(--cor-principal); font-size: 20px; text-transform: uppercase; }
+        .aviso-evento-breve p { margin: 0 0 15px 0; color: #666; font-size: 14px; }
+        .btn-abrir-form { background: var(--cor-secundaria); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; }
 
-        /* JANELA MODAL (FORMULÁRIO) */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 200; justify-content: center; align-items: center; padding: 10px; box-sizing: border-box; }
-        .modal-conteudo { background: white; width: 100%; max-width: 450px; border-radius: 16px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; position: relative; box-sizing: border-box; }
-        .fechar-modal { position: absolute; top: 15px; right: 15px; font-size: 22px; cursor: pointer; color: #999; border: none; background: none; }
-        
-        .form-grupo { margin-bottom: 12px; display: flex; flex-direction: column; }
-        .form-grupo label { font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #444; }
-        .form-grupo input, .form-grupo textarea, .form-grupo select { padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; background: #fff; }
-        .form-grupo input[readonly] { background: #f0f2f5; color: #666; cursor: not-allowed; }
-        
-        .btn-enviar { background: #0056e3; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 15px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
-        .btn-enviar:disabled { background: #ccc; cursor: not-allowed; }
-        
-        .sem-dados { grid-column: 1 / -1; text-align: center; padding: 40px; color: #999; font-size: 14px; }
+        /* Seção do Formulário */
+        #sessao-cadastro { display: none; padding: 25px; max-width: 550px; margin: 0 auto; background: #fff; }
+        .aviso-privacidade { background: #fff4ff; padding: 12px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #f9ebff; font-size: 12px; color: var(--cor-secundaria); line-height: 1.4; }
+        .campo { margin-bottom: 15px; }
+        .campo label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 5px; color: #444; }
+        .campo input, .campo select, .campo textarea { width: 100%; padding: 11px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; box-sizing: border-box; font-family: inherit; }
+        .btn-enviar { width: 100%; background: var(--cor-principal); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-top: 10px; }
+
+        .banner-protecao { background: var(--cinza-protecao); border-top: 1px solid var(--borda); padding: 15px; text-align: center; font-size: 10px; color: #777; margin-top: auto; }
+        .banner-protecao strong { color: var(--cor-principal); display: block; margin-bottom: 3px; }
     </style>
 </head>
 <body>
 
-    <div class="topo-container">
-        <div class="logo-area">Espaço Compras</div>
-        <div class="menu-locais" id="abas-locais">
-            <button class="btn-local ativo" onclick="mudarLocal('Ebusiness Park')">Ebusiness Park</button>
-            <button class="btn-local" onclick="mudarLocal('C&A Central')">C&A Central</button>
-            <button class="btn-local" onclick="mudarLocal('Jaguaré')">Jaguaré</button>
+<div class="container-guia">
+    <div class="header-locais">
+        <h2>Selecione o Espaço de Compras</h2>
+        <div class="abas-locais">
+            <button class="btn-local ativo" onclick="mudarLocal('Ebusiness Park', this)">Ebusiness Park</button>
+            <button class="btn-local" onclick="mudarLocal('Jaguaré Business Park', this)">Jaguaré Business</button>
+            <button class="btn-local" onclick="mudarLocal('C&A Alphaville', this)">C&A Alphaville</button>
         </div>
     </div>
 
-    <div class="banner-info">
-        <h2 id="nome-local-titulo">Ebusiness Park</h2>
-        <p id="periodo-evento-texto">Carregando próximas datas...</p>
+    <div id="tela-lista">
+        <div id="lista-corpo" class="grade-expositores">
+            <div id="msg-vazio" style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">Carregando expositores...</div>
+        </div>
     </div>
 
-    <div class="mural-titulo">Expositores Confirmados</div>
-    <div class="grid-expositores" id="lista-expositores">
-        <div class="sem-dados">Buscando informações da planilha...</div>
-    </div>
-
-    <a href="#" class="btn-flutuante" onclick="abrirFormulario(event)">Quero Participar ➕</a>
-
-    <div id="modalForm" class="modal">
-        <div class="modal-conteudo">
-            <button class="fechar-modal" onclick="fecharFormulario()">&times;</button>
-            <h3 style="margin-top:0; margin-bottom:15px; color:#111;">Inscrição de Expositor</h3>
+    <div id="sessao-cadastro">
+        <div id="conteudo-form">
+            <button onclick="fecharFormulario()" style="background:#666; color:white; border:none; padding:6px 12px; border-radius:15px; cursor:pointer; font-size:11px; font-weight:bold; margin-bottom:15px;">⬅ VOLTAR PARA A VITRINE</button>
             
-            <form id="cadastroForm" onsubmit="enviarDadosForm(event)">
-                <div class="form-grupo">
-                    <label>Espaço Selecionado</label>
-                    <input type="text" id="formLocal" readonly>
-                </div>
-                <div class="form-grupo">
-                    <label>Nome do Contato *</label>
-                    <input type="text" id="formContato" required>
-                </div>
-                <div class="form-grupo">
-                    <label>E-mail *</label>
-                    <input type="email" id="formEmail" required>
-                </div>
-                <div class="form-grupo">
-                    <label>Nome da Marca *</label>
-                    <input type="text" id="formMarca" required>
-                </div>
-                <div class="form-grupo">
-                    <label>Segmento *</label>
-                    <select id="formSegmento" required>
-                        <option value="">Selecione...</option>
-                        <option value="Vestuário">Vestuário</option>
-                        <option value="Perfumaria & Cosméticos">Perfumaria & Cosméticos</option>
-                        <option value="Acessórios & Joias">Acessórios & Joias</option>
-                        <option value="Artesanato">Artesanato</option>
-                        <option value="Gastronomia">Gastronomia</option>
-                        <option value="Outros">Outros</option>
-                    </select>
-                </div>
-                <div class="form-grupo">
-                    <label>Descrição dos Produtos *</label>
-                    <textarea id="formDescricao" rows="3" placeholder="Fale um pouco sobre o que você vende..." required></textarea>
-                </div>
-                <div class="form-grupo">
-                    <label>WhatsApp (com DDD) *</label>
-                    <input type="tel" id="formWhatsapp" placeholder="Ex: 11999998888" required>
-                </div>
-                <div class="form-grupo">
-                    <label>Instagram (@usuario ou link)</label>
-                    <input type="text" id="formInstagram" placeholder="Ex: @minhamarca">
-                </div>
-                <div class="form-grupo">
-                    <label>Já participou de qual evento nosso?</label>
-                    <input type="text" id="formEventoAnterior">
-                </div>
-                <div class="form-grupo">
-                    <label>Foto do Produto / Banner *</label>
-                    <input type="file" id="formArquivo" accept="image/*" required>
+            <form id="formIndicar">
+                <div class="aviso-privacidade">
+                    <strong>FORMULÁRIO DE INSCRIÇÃO:</strong> Preencha os dados da sua marca abaixo. Após o envio e a confirmação do pagamento, sua marca será ativada no Guia Oficial do evento selecionado.
                 </div>
                 
-                <button type="submit" class="btn-enviar" id="btnSubmit">Enviar Inscrição</button>
+                <div class="campo">
+                    <label>Espaço de Compras Desejado</label>
+                    <input type="text" name="localEvento" id="formLocalVisivel" readonly style="background: #f5f5f5; font-weight: bold; color: var(--cor-principal);">
+                </div>
+
+                <div class="campo"><label>Nome Completo do Responsável</label><input type="text" name="contato" required></div>
+                <div class="campo"><label>E-mail Comercial</label><input type="email" name="email" required></div>
+                <div class="campo"><label>Nome da sua Marca / Loja</label><input type="text" name="marca" required></div>
+                
+                <div class="campo">
+                    <label>Segmento de Atuação</label>
+                    <select name="segmento" required>
+                        <option value="">Selecione o seu segmento...</option>
+                        <option value="Artesanato & Decor">Artesanato & Decoração</option>
+                        <option value="Caldo de Cana & Pastel">Caldo de Cana & Pastel</option>
+                        <option value="Calçados & Bolsas">Calçados & Bolsas</option>
+                        <option value="Cosméticos & Maquiagem">Cosméticos & Maquiagem</option>
+                        <option value="Doces & Confeitaria">Doces & Confeitaria Gourmet</option>
+                        <option value="Frutas & Hortifruti">Frutas, Verduras e Legumes</option>
+                        <option value="Gastronomia & Lanches">Gastronomia / Lanches / Salgados</option>
+                        <option value="Moda Feminina">Moda Feminina</option>
+                        <option value="Moda Masculina">Moda Masculina</option>
+                        <option value="Moda Infantil & Kids">Moda Infantil & Kids</option>
+                        <option value="Moda Íntima & Pijamas">Moda Íntima & Pijamas</option>
+                        <option value="Acessórios & Semijoias">Acessórios, Joias & Semijoias</option>
+                        <option value="Perfumaria & Aromas">Perfumaria, Essências & Aromas</option>
+                        <option value="Pet Shop & Acessórios">Produtos para Pets</option>
+                        <option value="Queijos, Vinhos & Embutidos">Queijos, Vinhos & Sabores Regionais</option>
+                        <option value="Outros">Outros Segmentos</option>
+                    </select>
+                </div>
+
+                <div class="campo"><label>Descreva os produtos que envolvem sua marca</label><textarea name="descricao" rows="3" required placeholder="Ex: Doces gourmet, bolos caseiros e palha italiana..."></textarea></div>
+                <div class="campo"><label>WhatsApp Comercial (DDD+Número sem espaços)</label><input type="text" name="whatsapp" id="inputZap" required maxlength="11" placeholder="Ex: 11988887777"></div>
+                <div class="campo"><label>Instagram da Loja</label><input type="text" name="instagram" placeholder="Ex: @sualoja" required></div>
+                <div class="campo"><label>Facebook da Loja (Opcional)</label><input type="text" name="facebook" placeholder="Ex: facebook.com/sualoja"></div>
+                <div class="campo"><label>TikTok da Loja (Opcional)</label><input type="text" name="tiktok" placeholder="Ex: @sualojatiktok"></div>
+                <div class="campo"><label>Qual evento você já fez com a Cláudia Dib?</label><input type="text" name="eventoAnterior" placeholder="Se for o primeiro, digite: Nenhum" required></div>
+                
+                <div class="campo">
+                    <label>Foto do Produto ou Logomarca</label>
+                    <input type="file" name="fotoArquivo" id="fotoArquivo" accept="image/*" required>
+                </div>
+                
+                <button type="submit" class="btn-enviar" id="btnEnviar">Enviar Inscrição</button>
             </form>
         </div>
     </div>
+</div>
 
-    <script>
-        // SUBSTITUA ESTE LINK PELO LINK ATUAL DO SEU WEB APP (DO APPS SCRIPT)
-        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwn92eI78zS_W4qP3Yyv6F6kG9G3vW4Y-Z03CaXvOvwPlHPl3y_6A1x/exec";
-        
-        const imgPadraoGlobal = "https://raw.githubusercontent.com/claudiaartesdigitais-maker/adm-radio/main/mural.png";
-        
-        let localAtivo = "Ebusiness Park";
-        let proximasDatasGerais = {};
+<div class="banner-protecao">
+    <strong>© Cláudia Dib - Espaço de Compras</strong>
+    As ativações e exibições no guia dependem da confirmação de participação no evento presencial.
+</div>
 
-        // Muda a aba ativa do topo
-        function mudarLocal(novoLocal) {
-            localAtivo = novoLocal;
+<script>
+    // Link do Apps Script do seu último deploy
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxyekAFRil1hfZPspwj2YuO44pnVU0Z1R8GxEYEgki4mcE89RVsHBrqTE3e7uM92_Ug3w/exec"; 
+    
+    let dadosGerais = [];
+    let proximasDatas = {};
+    let localSelecionado = "Ebusiness Park";
+
+    function mudarLocal(novoLocal, elemento) {
+        document.querySelectorAll('.btn-local').forEach(b => b.classList.remove('ativo'));
+        elemento.classList.add('ativo');
+        localSelecionado = novoLocal;
+        fecharFormulario();
+        filtrarEExibir();
+    }
+
+    function abrirFormulario() {
+        document.getElementById('formLocalVisivel').value = localSelecionado;
+        document.getElementById('tela-lista').style.display = "none";
+        document.getElementById('sessao-cadastro').style.display = "block";
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function fecharFormulario() {
+        document.getElementById('tela-lista').style.display = "block";
+        document.getElementById('sessao-cadastro').style.display = "none";
+    }
+
+    async function buscarDados() {
+        try {
+            const res = await fetch(URL_SCRIPT);
+            const pacoteData = await res.json();
             
-            // Gerencia classes ativas nos botões
-            const botoes = document.querySelectorAll(".btn-local");
-            botoes.forEach(btn => {
-                if(btn.innerText.trim().toLowerCase() === novoLocal.toLowerCase()) {
-                    btn.classList.add("ativo");
-                } else {
-                    btn.classList.remove("ativo");
+            dadosGerais = pacoteData.expositores || [];
+            proximasDatas = pacoteData.proximasDatas || {};
+            
+            filtrarEExibir();
+        } catch (e) { 
+            filtrarEExibir();
+        }
+    }
+
+    function converterData(stringData) {
+        if (!stringData) return null;
+        const partes = stringData.split('/');
+        if (partes.length === 3) {
+            // Cria o objeto de data baseado em DD/MM/AAAA de forma segura
+            return new Date(partes[2], partes[1] - 1, partes[0]);
+        }
+        return null;
+    }
+
+    function filtrarEExibir() {
+        const corpo = document.getElementById('lista-corpo');
+        const filtrados = dadosGerais.filter(i => i.localEvento === localSelecionado);
+        
+        // SE NÃO HOUVER EXPOSITOR ATIVO COM "SIM" NESTE LOCAL
+        if (filtrados.length === 0) {
+            const dadosDataBrutos = proximasDatas[localSelecionado] || "";
+            const colunasDeData = dadosDataBrutos.split(',').map(d => d.trim()).filter(d => d !== "");
+            
+            const dataPrincipalStr = colunasDeData[0] || "";
+            let dataEventoObj = converterData(dataPrincipalStr);
+            
+            let hoje = new Date();
+            hoje.setHours(0,0,0,0);
+
+            // Verifica se a primeira data existe e está no futuro/presente
+            if (dataPrincipalStr && dataEventoObj && dataEventoObj >= hoje) {
+                
+                let textoPeriodo = dataPrincipalStr;
+                
+                // CRIA O FORMATO RESUMIDO REQUISITADO "25/05 a 27/05/2026"
+                if (colunasDeData.length >= 2) {
+                    const primeiraData = colunasDeData[0]; 
+                    const ultimaData = colunasDeData[colunasDeData.length - 1]; 
+                    
+                    const partesPrimeira = primeiraData.split('/');
+                    const diaMesPrimeira = `${partesPrimeira[0]}/${partesPrimeira[1]}`;
+                    
+                    textoPeriodo = `${diaMesPrimeira} a ${ultimaData}`;
                 }
-            });
-            
-            // Atualiza os títulos e períodos textuais
-            document.getElementById("nome-local-titulo").innerText = novoLocal;
-            atualizarPeriodosNosBlocos();
-            
-            // Recarrega os cards da vitrine baseados no filtro do local ativo
-            carregarExpositores();
-        }
 
-        // Atualiza a frase descritiva das datas embaixo do título
-        function atualizarPeriodosNosBlocos() {
-            const campoTexto = document.getElementById("periodo-evento-texto");
-            if (!campoTexto) return;
-            
-            const textoDatas = proximasDatasGerais[localAtivo];
-            
-            if (textoDatas && textoDatas.trim() !== "") {
-                campoTexto.innerText = "Período: " + textoDatas;
+                corpo.innerHTML = `
+                    <div class="aviso-evento-breve">
+                        <h3>🏛️ ${localSelecionado}</h3>
+                        <p>📅 <strong>PRÓXIMO EVENTO: ${textoPeriodo}</strong></p>
+                        <p>As inscrições de expositores para esta nova edição já estão abertas!</p>
+                        <button class="btn-abrir-form" onclick="abrirFormulario()">Quero Participar ➕</button>
+                    </div>
+                `;
             } else {
-                campoTexto.innerText = "Próximas datas: Em breve!";
+                // Mensagem padrão amigável caso o evento já tenha passado (Teste do Jaguaré)
+                corpo.innerHTML = `
+                    <div class="aviso-evento-breve">
+                        <h3>🏛️ ${localSelecionado}</h3>
+                        <p>📢 <strong>EM BREVE NOVO EVENTO!</strong></p>
+                        <p>Estamos preparando a próxima edição deste espaço. Acompanhe as nossas redes sociais para saber as próximas datas em primeira mão!</p>
+                    </div>
+                `;
             }
+            return;
         }
+        
+        // SE HOUVER EXPOSITORES ATIVOS COM "SIM", CRIA OS CARDS DA VITRINE
+        corpo.innerHTML = filtrados.map(item => {
+            let urlFoto = item.foto || "";
+            if (urlFoto.includes('drive.google.com')) {
+                const match = urlFoto.match(/[-\w]{25,}/);
+                if (match) urlFoto = `https://drive.google.com/thumbnail?id=${match[0]}&sz=w600`;
+            }
+            if(!urlFoto) urlFoto = 'https://via.placeholder.com/400?text=Espaço+de+Compras';
 
-        // PUXA OS EXPOSITORES COM A MÁGICA DA RÁDIO COTIA PARA AS IMAGENS
-        async function carregarExpositores() {
+            let botaoInsta = "";
+            if(item.instagram) {
+                botaoInsta = `<a href="${item.instagram}" class="btn-rede btn-insta" target="_blank">📸 Instagram</a>`;
+            }
+
+            return `
+                <div class="card-expositor">
+                    <img src="${urlFoto}" class="foto-expositor" onerror="this.src='https://via.placeholder.com/400?text=Espaço+de+Compras'">
+                    <div class="detalhes-expositor">
+                        <span class="segmento-tag">🛍️ ${item.segmento || "Geral"}</span>
+                        <h3 class="marca-titulo">${item.marca || "Expositor"}</h3>
+                        <p class="responsavel-nome">👤 Por: ${item.contato}</p>
+                        
+                        <div class="botoes-contato">
+                            <a href="${item.whatsapp}" class="btn-rede btn-zap" target="_blank">📱 WhatsApp</a>
+                            ${botaoInsta}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        corpo.innerHTML += `
+            <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
+                <button class="btn-abrir-form" style="background: var(--cor-principal);" onclick="abrirFormulario()">Quero expor neste local ➕</button>
+            </div>
+        `;
+    }
+
+    const inputZap = document.getElementById('inputZap');
+    if(inputZap) inputZap.addEventListener('input', function(e) { this.value = this.value.replace(/\D/g, ''); });
+
+    document.getElementById('formIndicar').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnEnviar');
+        btn.innerText = "Enviando dados e foto..."; btn.disabled = true;
+        
+        const fileInput = document.getElementById('fotoArquivo');
+        const file = fileInput.files[0];
+        
+        if(!file) { alert("Por favor, selecione uma foto."); btn.disabled = false; return; }
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async function () {
+            const base64Data = reader.result.split(',')[1];
+            const formData = new FormData(e.target);
+            const dataHoje = new Date().toLocaleDateString('pt-BR');
+            
+            const objeto = {
+                contato: formData.get('contato'),
+                email: formData.get('email'),
+                marca: formData.get('marca'),
+                segmento: formData.get('segmento'),
+                descricao: formData.get('descricao'),
+                whatsapp: formData.get('whatsapp'),
+                instagram: formData.get('instagram'),
+                facebook: formData.get('facebook'),
+                tiktok: formData.get('tiktok'),
+                eventoAnterior: formData.get('eventoAnterior'),
+                localEvento: localSelecionado,
+                dataEvento: dataHoje,
+                arquivoData: base64Data,
+                arquivoNome: file.name,
+                arquivoMime: file.type
+            };
+            
             try {
-                const resposta = await fetch(URL_SCRIPT);
-                const dados = await resposta.json();
-                
-                proximasDatasGerais = dados.proximasDatas || {};
-                atualizarPeriodosNosBlocos();
-                
-                const container = document.getElementById("lista-expositores");
-                if (!container) return;
-                
-                container.innerHTML = "";
-                
-                // Filtra os expositores cujo local bate com o local selecionado
-                const filtrados = (dados.expositores || []).filter(item => 
-                    item.localEvento && item.localEvento.trim().toLowerCase() === localAtivo.toLowerCase()
-                );
-                
-                if (filtrados.length === 0) {
-                    container.innerHTML = `<div class="sem-dados"><p>Nenhum expositor aprovado para este espaço no momento.</p></div>`;
-                    return;
-                }
-                
-                filtrados.forEach(item => {
-                    // MÁGICA DA RÁDIO: Captura o ID do link do Google Drive para montar a imagem direta
-                    const linkFotoOriginal = item.foto || "";
-                    const driveMatch = linkFotoOriginal.match(/[-\w]{25,}/);
-                    const urlImagemConvertida = driveMatch ? `https://drive.google.com/thumbnail?id=${driveMatch[0]}&sz=w800` : imgPadraoGlobal;
-                    
-                    const card = document.createElement("div");
-                    card.className = "card-expositor";
-                    card.innerHTML = `
-                        <div class="thumb-expositor">
-                            <img src="${urlImagemConvertida}" alt="${item.marca}" onerror="this.src='${imgPadraoGlobal}'">
-                        </div>
-                        <div class="corpo-expositor">
-                            <span class="segmento-tag">${item.segmento || "Geral"}</span>
-                            <h3 class="marca-titulo">${item.marca}</h3>
-                            <p class="descricao-texto">${item.descricao || ""}</p>
-                            <div class="contatos-container">
-                                ${item.whatsapp ? `<a href="${item.whatsapp}" target="_blank" class="btn-contato btn-zap">WhatsApp</a>` : ""}
-                                ${item.instagram ? `<a href="${item.instagram}" target="_blank" class="btn-contato btn-insta">Instagram</a>` : ""}
-                            </div>
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-                
-            } catch (erro) {
-                console.error("Erro ao processar dados do painel:", erro);
-                const container = document.getElementById("lista-expositores");
-                if(container) container.innerHTML = `<div class="sem-dados"><p>Não foi possível carregar os dados da vitrine.</p></div>`;
-            }
-        }
-
-        // CONTROLE DO MODAL DO FORMULÁRIO
-        function abrirFormulario(e) {
-            e.preventDefault();
-            document.getElementById("formLocal").value = localAtivo;
-            document.getElementById("modalForm").style.display = "flex";
-        }
-
-        function fecharFormulario() {
-            document.getElementById("modalForm").style.display = "none";
-            document.getElementById("cadastroForm").reset();
-        }
-
-        // ENVIO DO FORMULÁRIO CONVERTENDO A IMAGEM EM BASE64
-        function enviarDadosForm(e) {
-            e.preventDefault();
-            
-            const btn = document.getElementById("btnSubmit");
-            btn.disabled = true;
-            btn.innerText = "Enviando, aguarde...";
-            
-            const arquivoInput = document.getElementById("formArquivo").files[0];
-            
-            if (arquivoInput) {
-                const leitor = new FileReader();
-                leitor.onload = function(eventoArquivo) {
-                    const dadosBase64 = eventoArquivo.target.result.split(',')[1];
-                    
-                    // Monta o pacote de dados organizados
-                    const pacote = {
-                        localEvento: document.getElementById("formLocal").value,
-                        contato: document.getElementById("formContato").value,
-                        email: document.getElementById("formEmail").value,
-                        marca: document.getElementById("formMarca").value,
-                        segmento: document.getElementById("formSegmento").value,
-                        descricao: document.getElementById("formDescricao").value,
-                        whatsapp: document.getElementById("formWhatsapp").value,
-                        instagram: document.getElementById("formInstagram").value,
-                        eventoAnterior: document.getElementById("formEventoAnterior").value,
-                        dataEvento: new Date().toLocaleDateString('pt-BR'),
-                        arquivoData: dadosBase64,
-                        arquivoMime: arquivoInput.type,
-                        arquivoNome: arquivoInput.name
-                    };
-                    
-                    // Envia via POST para o Apps Script
-                    fetch(URL_SCRIPT, {
-                        method: "POST",
-                        mode: "no-cors",
-                        body: JSON.stringify(pacote)
-                    })
-                    .then(() => {
-                        alert("Inscrição recebida! Seus dados e sua foto foram enviados com sucesso. Assim que nossa equipe aprovar, você aparecerá na vitrine!");
-                        fecharFormulario();
-                        btn.disabled = false;
-                        btn.innerText = "Enviar Inscrição";
-                    })
-                    .catch(erro => {
-                        console.error(erro);
-                        alert("Ocorreu um erro no processamento do arquivo. Tente novamente.");
-                        btn.disabled = false;
-                        btn.innerText = "Enviar Inscrição";
-                    });
-                };
-                leitor.readAsDataURL(arquivoInput);
-            } else {
-                alert("Por favor, selecione uma imagem para o seu card.");
-                btn.disabled = false;
-                btn.innerText = "Enviar Inscrição";
-            }
-        }
-
-        // Inicialização automática ao abrir o site
-        window.onload = () => {
-            carregarExpositores();
+                await fetch(URL_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(objeto) });
+                document.getElementById('conteudo-form').innerHTML = `
+                    <div style="text-align: center; padding: 30px;">
+                        <div style="font-size: 40px;">🎉</div>
+                        <h2 style="color: var(--cor-principal);">Inscrição Recebida!</h2>
+                        <p>Seus dados e sua foto foram enviados com sucesso para a análise da Cláudia Dib.</p>
+                        <p style="font-size:13px; color:#666;">Assim que a confirmação for realizada na planilha, sua marca subirá para a vitrine do evento!</p>
+                        <button onclick="location.reload()" class="btn-enviar">VOLTAR PARA A VITRINE</button>
+                    </div>
+                `;
+            } catch (err) { alert("Erro ao enviar dados."); btn.innerText = "Enviar Inscrição"; btn.disabled = false; }
         };
-    </script>
+    };
+
+    buscarDados();
+</script>
 </body>
 </html>
