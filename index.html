@@ -322,7 +322,7 @@
             corpo.innerHTML = `
                 <div class="aviso-evento-breve">
                     <h3>🏛️ ${localSelecionado}</h3>
-                    <p>Nenhuma marca ativa na vitrine deste local no momento.</p>
+                    <p>Nenhuma marca activa na vitrine deste local no momento.</p>
                     <p style="font-size:12px; color:#666;">Escolha uma das datas na agenda acima para realizar a sua inscrição oficial!</p>
                 </div>
             `;
@@ -330,7 +330,6 @@
         }
         
         corpo.innerHTML = filtrados.map(item => {
-            // LOGICA ORIGINAL QUE FAZ A IMAGEM APARECER CORRETAMENTE:
             let urlFoto = item.foto || "";
             if (urlFoto.includes('drive.google.com')) {
                 const match = urlFoto.match(/[-\w]{25,}/);
@@ -345,6 +344,12 @@
 
             let dataFormatadaExpositor = formatarDataDoBanco(item.dataEvento);
 
+            // ALTERAÇÃO SOLICITADA: Exibe a frase apenas se houver uma data definida vinda do banco
+            let htmlFraseChamada = "";
+            if (item.dataEvento && item.dataEvento !== "Confirmada" && item.dataEvento.trim() !== "") {
+                htmlFraseChamada = `<div class="frase-chamada-card">📣 O evento começou! Confira as marcas presentes, entre em contato e antecipe suas compras ou encomendas direto pelo WhatsApp!</div>`;
+            }
+
             return `
                 <div class="card-expositor">
                     <img src="${urlFoto}" class="foto-expositor" onerror="this.src='https://via.placeholder.com/400?text=Espaço+de+Compras'">
@@ -354,7 +359,7 @@
                         <p class="responsavel-nome">👤 Por: ${item.contato}</p>
                         <span class="data-expositor-tag">🗓️ Edição: ${dataFormatadaExpositor}</span>
                         
-                        <div class="frase-chamada-card">📣 O evento começou! Confira as marcas presentes, entre em contato e antecipe suas compras ou encomendas direto pelo WhatsApp!</div>
+                        ${htmlFraseChamada}
                         
                         <div class="botoes-contato">
                             <a href="${item.whatsapp}" class="btn-rede btn-zap" target="_blank">📱 WhatsApp</a>
