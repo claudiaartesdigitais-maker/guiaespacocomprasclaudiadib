@@ -26,6 +26,10 @@
         .btn-local { background: #fff; border: 2px solid var(--borda); padding: 10px 18px; border-radius: 25px; cursor: pointer; color: var(--cor-principal); font-weight: bold; font-size: 12px; text-transform: uppercase; transition: 0.3s; }
         .btn-local.ativo { background: var(--cor-principal); color: white; border-color: var(--cor-principal); box-shadow: 0 4px 10px rgba(103, 58, 183, 0.3); }
 
+        /* Banner Informativo Dinâmico de Datas */
+        .banner-info-data { background: #fff4ff; border-bottom: 1px solid var(--borda); padding: 12px 20px; text-align: center; font-size: 13px; color: #444; line-height: 1.4; display: none; }
+        .banner-info-data strong { color: var(--cor-secundaria); }
+
         /* Mosaico de Cards */
         .grade-expositores { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
         .card-expositor { background: white; border-radius: 12px; border: 1px solid var(--borda); overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; transition: 0.3s; }
@@ -67,16 +71,16 @@
 <div class="container-guia">
     <div class="header-locais">
         <h2>Selecione o Espaço de Compras</h2>
-        <div class="abas-locais">
-            <button class="btn-local ativo" onclick="mudarLocal('Ebusiness Park', this)">Ebusiness Park</button>
-            <button class="btn-local" onclick="mudarLocal('Jaguaré Business Park', this)">Jaguaré Business</button>
-            <button class="btn-local" onclick="mudarLocal('C&A Alphaville', this)">C&A Alphaville</button>
+        <div class="abas-locais" id="botoes-abas-dinamicas">
+            <span style="font-size:12px; color:#999;">Sincronizando locais...</span>
         </div>
     </div>
 
+    <div id="banner-status-evento" class="banner-info-data"></div>
+
     <div id="tela-lista">
         <div id="lista-corpo" class="grade-expositores">
-            <div id="msg-vazio" style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">Carregando expositores...</div>
+            <div id="msg-vazio" style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">Carregando expositores oficiais...</div>
         </div>
     </div>
 
@@ -100,25 +104,14 @@
                 
                 <div class="campo">
                     <label>Segmento de Atuação</label>
-                    <select name="segmento" required>
-                        <option value="">Selecione o seu segmento...</option>
-                        <option value="Artesanato & Decor">Artesanato & Decoração</option>
-                        <option value="Caldo de Cana & Pastel">Caldo de Cana & Pastel</option>
-                        <option value="Calçados & Bolsas">Calçados & Bolsas</option>
-                        <option value="Cosméticos & Maquiagem">Cosméticos & Maquiagem</option>
-                        <option value="Doces & Confeitaria">Doces & Confeitaria Gourmet</option>
-                        <option value="Frutas & Hortifruti">Frutas, Verduras e Legumes</option>
-                        <option value="Gastronomia & Lanches">Gastronomia / Lanches / Salgados</option>
-                        <option value="Moda Feminina">Moda Feminina</option>
-                        <option value="Moda Masculina">Moda Masculina</option>
-                        <option value="Moda Infantil & Kids">Moda Infantil & Kids</option>
-                        <option value="Moda Íntima & Pijamas">Moda Íntima & Pijamas</option>
-                        <option value="Acessórios & Semijoias">Acessórios, Joias & Semijoias</option>
-                        <option value="Perfumaria & Aromas">Perfumaria, Essências & Aromas</option>
-                        <option value="Pet Shop & Acessórios">Produtos para Pets</option>
-                        <option value="Queijos, Vinhos & Embutidos">Queijos, Vinhos & Sabores Regionais</option>
-                        <option value="Outros">Outros Segmentos</option>
+                    <select name="segmento" id="selectSegmento" onchange="verificarOutroSegmento(this)" required>
+                        <option value="">Carregando segmentos...</option>
                     </select>
+                </div>
+
+                <div class="campo" id="campoSegmentoTexto" style="display: none;">
+                    <label>Digite o seu Segmento Específico</label>
+                    <input type="text" id="inputSegmentoOutro" placeholder="Ex: Moda Pet Customizada">
                 </div>
 
                 <div class="campo"><label>Descreva os produtos que envolvem sua marca</label><textarea name="descricao" rows="3" required placeholder="Ex: Doces gourmet, bolos caseiros e palha italiana..."></textarea></div>
@@ -146,15 +139,16 @@
 
 <script>
     // Link do Apps Script do seu último deploy
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz8FMuuzqLZwKLa61Ncg8x53C4coFm6QwJKXHZ6cUrteKXHkNl409rltt0Jh60oTjyHYg/exec"; 
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxa-entsdC6zlMiEyCyQmsiXXlCrCvNeueh70G6MlxnmiC6d2I45-w2hBs0orpZtE5FKA/exec"; 
     
     let dadosGerais = [];
     let proximasDatas = {};
-    let localSelecionado = "Ebusiness Park";
+    let listaSegmentosDoBanco = [];
+    let localSelecionado = "";
 
     function mudarLocal(novoLocal, elemento) {
         document.querySelectorAll('.btn-local').forEach(b => b.classList.remove('ativo'));
-        elemento.classList.add('ativo');
+        if(elemento) elemento.classList.add('ativo');
         localSelecionado = novoLocal;
         fecharFormulario();
         filtrarEExibir();
@@ -172,6 +166,19 @@
         document.getElementById('sessao-cadastro').style.display = "none";
     }
 
+    function verificarOutroSegmento(select) {
+        const campoTexto = document.getElementById('campoSegmentoTexto');
+        const inputTexto = document.getElementById('inputSegmentoOutro');
+        if (select.value.toLowerCase() === 'outros' || select.value.toLowerCase() === 'outro') {
+            campoTexto.style.display = 'block';
+            inputTexto.required = true;
+        } else {
+            campoTexto.style.display = 'none';
+            inputTexto.required = false;
+            inputTexto.value = '';
+        }
+    }
+
     async function buscarDados() {
         try {
             const res = await fetch(URL_SCRIPT);
@@ -179,9 +186,40 @@
             
             dadosGerais = pacoteData.expositores || [];
             proximasDatas = pacoteData.proximasDatas || {};
+            listaSegmentosDoBanco = pacoteData.segmentos || [];
+            
+            // 1. MONTA OS BOTÕES DE LOCAIS DE FORMA DINÂMICA
+            const containerAbas = document.getElementById('botoes-abas-dinamicas');
+            const listaLocais = pacoteData.locais || [];
+            
+            if(listaLocais.length > 0) {
+                localSelecionado = listaLocais[0]; // Seleciona o primeiro local por padrão
+                containerAbas.innerHTML = listaLocais.map((local, index) => {
+                    return `<button class="btn-local ${index === 0 ? 'ativo' : ''}" onclick="mudarLocal('${local}', this)">${local}</button>`;
+                }).join('');
+            } else {
+                containerAbas.innerHTML = `<span style="font-size:12px; color:#999;">Nenhum espaço ativo encontrado na planilha</span>`;
+            }
+
+            // 2. MONTA A LISTA SUSPENSA DE SEGMENTOS DE FORMA DINÂMICA
+            const selectSeg = document.getElementById('selectSegmento');
+            if(listaSegmentosDoBanco.length > 0) {
+                let htmlSeg = '<option value="">Selecione o seu segmento...</option>';
+                listaSegmentosDoBanco.forEach(seg => {
+                    htmlSeg += `<option value="${seg}">${seg}</option>`;
+                });
+                // Garante a existência da opção "Outros" caso ela não esteja listada na planilha
+                if(!listaSegmentosDoBanco.some(s => s.toLowerCase() === 'outros' || s.toLowerCase() === 'outro')) {
+                    htmlSeg += '<option value="Outros">Outros</option>';
+                }
+                selectSeg.innerHTML = htmlSeg;
+            } else {
+                selectSeg.innerHTML = '<option value="">Erro ao carregar segmentos da planilha</option>';
+            }
             
             filtrarEExibir();
         } catch (e) { 
+            document.getElementById('botoes-abas-dinamicas').innerHTML = `<span style="font-size:12px; color:#ff4444;">Erro na conexão com o banco de dados.</span>`;
             filtrarEExibir();
         }
     }
@@ -190,71 +228,95 @@
         if (!stringData) return null;
         const partes = stringData.split('/');
         if (partes.length === 3) {
-            // Cria o objeto de data baseado em DD/MM/AAAA de forma segura
             return new Date(partes[2], partes[1] - 1, partes[0]);
         }
         return null;
     }
 
+    function analisarStatusDasDatas(dadosDataBrutos) {
+        if (!dadosDataBrutos) return { status: "sem_data", texto: "" };
+        
+        const colunasDeData = dadosDataBrutos.split(',').map(d => d.trim()).filter(d => d !== "");
+        if (colunasDeData.length === 0) return { status: "sem_data", texto: "" };
+
+        let hoje = new Date();
+        hoje.setHours(0,0,0,0);
+
+        let datasConvertidas = colunasDeData.map(d => ({ str: d, obj: converterData(d) })).filter(d => d.obj !== null);
+        if (datasConvertidas.length === 0) return { status: "sem_data", texto: "" };
+
+        // Organiza as datas por ordem cronológica
+        datasConvertidas.sort((a, b) => a.obj - b.obj);
+
+        const dataPrimeiraObj = datasConvertidas[0].obj;
+        const dataUltimaObj = datasConvertidas[datasConvertidas.length - 1].obj;
+        
+        let textoPeriodo = datasConvertidas[0].str;
+        if (datasConvertidas.length >= 2) {
+            const partesPrimeira = datasConvertidas[0].str.split('/');
+            textoPeriodo = `${partesPrimeira[0]}/${partesPrimeira[1]} a ${datasConvertidas[datasConvertidas.length - 1].str}`;
+        }
+
+        // Caso 1: O dia atual está dentro do intervalo do evento (Evento Acontecendo)
+        if (hoje >= dataPrimeiraObj && hoje <= dataUltimaObj) {
+            return { status: "ativo", texto: textoPeriodo };
+        }
+        // Caso 2: O evento completo está no futuro
+        if (hoje < dataPrimeiraObj) {
+            return { status: "futuro", texto: textoPeriodo };
+        }
+        // Caso 3: O evento já passou completamente
+        return { status: "passado", texto: "" };
+    }
+
     function filtrarEExibir() {
         const corpo = document.getElementById('lista-corpo');
-        const filtrados = dadosGerais.filter(i => i.localEvento === localSelecionado);
+        const bannerStatus = document.getElementById('banner-status-evento');
         
-        // SE NÃO HOUVER EXPOSITOR ATIVO COM "SIM" NESTE LOCAL
+        if (!localSelecionado) return;
+
+        const filtrados = dadosGerais.filter(i => i.localEvento === localSelecionado);
+        const dadosDataBrutos = proximasDatas[localSelecionado] || "";
+        const analiseData = analisarStatusDasDatas(dadosDataBrutos);
+
+        // CONFIGURAÇÃO DO BANNER SUPERIOR DE AVISO DE ACORDO COM O STATUS DA DATA
+        if (analiseData.status === "ativo") {
+            bannerStatus.style.display = "block";
+            bannerStatus.innerHTML = `✨ <strong>O evento começou!</strong> Confira as marcas presentes, entre em contato e antecipe suas compras ou encomendas direto pelo WhatsApp!`;
+        } else if (analiseData.status === "futuro") {
+            bannerStatus.style.display = "block";
+            bannerStatus.innerHTML = `📅 <strong>Próxima Edição Confirmada:</strong> De ${analiseData.texto}. Faça seu planejamento!`;
+        } else {
+            bannerStatus.style.display = "none";
+        }
+        
+        // SE NÃO HOUVER EXPOSITORES CADASTRADOS E LIBERADOS COM "SIM"
         if (filtrados.length === 0) {
-            const dadosDataBrutos = proximasDatas[localSelecionado] || "";
-            const colunasDeData = dadosDataBrutos.split(',').map(d => d.trim()).filter(d => d !== "");
-            
-            const dataPrincipalStr = colunasDeData[0] || "";
-            let dataEventoObj = converterData(dataPrincipalStr);
-            
-            let hoje = new Date();
-            hoje.setHours(0,0,0,0);
-
-            // Verifica se a primeira data existe e está no futuro/presente
-            if (dataPrincipalStr && dataEventoObj && dataEventoObj >= hoje) {
-                
-                let textoPeriodo = dataPrincipalStr;
-                
-                // CRIA O FORMATO RESUMIDO REQUISITADO "25/05 a 27/05/2026"
-                if (colunasDeData.length >= 2) {
-                    const primeiraData = colunasDeData[0]; 
-                    const ultimaData = colunasDeData[colunasDeData.length - 1]; 
-                    
-                    const partesPrimeira = primeiraData.split('/');
-                    const diaMesPrimeira = `${partesPrimeira[0]}/${partesPrimeira[1]}`;
-                    
-                    textoPeriodo = `${diaMesPrimeira} a ${ultimaData}`;
-                }
-
+            if (analiseData.status === "futuro" || analiseData.status === "ativo") {
                 corpo.innerHTML = `
                     <div class="aviso-evento-breve">
                         <h3>🏛️ ${localSelecionado}</h3>
-                        <p>📅 <strong>PRÓXIMO EVENTO: ${textoPeriodo}</strong></p>
-                        <p>As inscrições de expositores para esta nova edição já estão abertas!</p>
+                        <p>📅 <strong>DATA DO EVENTO: ${analiseData.texto}</strong></p>
+                        <p>As inscrições de expositores para esta edição estão abertas!</p>
                         <button class="btn-abrir-form" onclick="abrirFormulario()">Quero Participar ➕</button>
                     </div>
                 `;
             } else {
-                // Mensagem padrão amigável caso o evento já tenha passado (Teste do Jaguaré)
                 corpo.innerHTML = `
                     <div class="aviso-evento-breve">
                         <h3>🏛️ ${localSelecionado}</h3>
                         <p>📢 <strong>EM BREVE NOVO EVENTO!</strong></p>
                         <p>Estamos preparando a próxima edição deste espaço. Acompanhe as nossas redes sociais para saber as próximas datas em primeira mão!</p>
+                        <button class="btn-abrir-form" onclick="abrirFormulario()">Quero me cadastrar para vagas ➕</button>
                     </div>
                 `;
             }
             return;
         }
         
-        // SE HOUVER EXPOSITORES ATIVOS COM "SIM", CRIA OS CARDS DA VITRINE
+        // SE HOUVER EXPOSITORES ATIVOS, MONTA OS CARDS
         corpo.innerHTML = filtrados.map(item => {
             let urlFoto = item.foto || "";
-            if (urlFoto.includes('drive.google.com')) {
-                const match = urlFoto.match(/[-\w]{25,}/);
-                if (match) urlFoto = `https://drive.google.com/thumbnail?id=${match[0]}&sz=w600`;
-            }
             if(!urlFoto) urlFoto = 'https://via.placeholder.com/400?text=Espaço+de+Compras';
 
             let botaoInsta = "";
@@ -279,6 +341,7 @@
             `;
         }).join('');
         
+        // ADICIONA O BOTÃO DE INSCRIÇÃO SEMPRE NO FINAL DA LISTA DE CARDS
         corpo.innerHTML += `
             <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
                 <button class="btn-abrir-form" style="background: var(--cor-principal);" onclick="abrirFormulario()">Quero expor neste local ➕</button>
@@ -306,16 +369,23 @@
             const formData = new FormData(e.target);
             const dataHoje = new Date().toLocaleDateString('pt-BR');
             
+            // TRATAMENTO DA OPÇÃO DE SEGMENTO PERSONALIZADO "OUTROS"
+            let segmentoSelecionado = formData.get('segmento');
+            if(segmentoSelecionado.toLowerCase() === 'outros' || segmentoSelecionado.toLowerCase() === 'outro') {
+                segmentoSelecionado = document.getElementById('inputSegmentoOutro').value.trim();
+                if(!segmentoSelecionado) { segmentoSelecionado = "Outros"; }
+            }
+            
             const objeto = {
                 contato: formData.get('contato'),
                 email: formData.get('email'),
                 marca: formData.get('marca'),
-                segmento: formData.get('segmento'),
+                segmento: segmentoSelecionado,
                 descricao: formData.get('descricao'),
                 whatsapp: formData.get('whatsapp'),
                 instagram: formData.get('instagram'),
-                facebook: formData.get('facebook'),
-                tiktok: formData.get('tiktok'),
+                facebook: formData.get('facebook') || "",
+                tiktok: formData.get('tiktok') || "",
                 eventoAnterior: formData.get('eventoAnterior'),
                 localEvento: localSelecionado,
                 dataEvento: dataHoje,
