@@ -26,11 +26,22 @@
         .btn-local { background: #fff; border: 2px solid var(--borda); padding: 10px 18px; border-radius: 25px; cursor: pointer; color: var(--cor-principal); font-weight: bold; font-size: 12px; text-transform: uppercase; transition: 0.3s; }
         .btn-local.ativo { background: var(--cor-principal); color: white; border-color: var(--cor-principal); box-shadow: 0 4px 10px rgba(103, 58, 183, 0.3); }
 
-        /* Banner Informativo Dinâmico de Datas */
-        .banner-info-data { background: #fff4ff; border-bottom: 1px solid var(--borda); padding: 12px 20px; text-align: center; font-size: 13px; color: #444; line-height: 1.4; display: none; }
-        .banner-info-data strong { color: var(--cor-secundaria); }
+        /* Mosaico Superior de Agendas */
+        .secao-agenda-datas { background: #fffbff; border-bottom: 1px solid var(--borda); padding: 15px 20px; }
+        .titulo-agenda { font-size: 13px; font-weight: bold; color: var(--cor-principal); margin: 0 0 10px 0; text-transform: uppercase; text-align: center; }
+        .grade-datas-agenda { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        
+        .card-data-status { background: white; border: 1px solid var(--borda); border-radius: 8px; padding: 10px 15px; display: flex; flex-direction: column; align-items: center; min-width: 140px; box-shadow: 0 2px 5px rgba(0,0,0,0.01); text-align: center; }
+        .card-data-status .data-texto { font-weight: bold; font-size: 14px; color: #222; margin-bottom: 4px; }
+        .card-data-status .selo-status { font-size: 10px; font-weight: bold; text-transform: uppercase; padding: 3px 8px; border-radius: 10px; margin-bottom: 5px; }
+        .status-futuro { background: #e8f5e9; color: #2e7d32; }
+        .status-ativo { background: #fff3e0; color: #ef6c00; }
+        .status-passado { background: #ffebee; color: #c62828; }
+        
+        .btn-acao-agenda { background: var(--cor-secundaria); color: white; border: none; padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .btn-acao-agenda:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* Mosaico de Cards */
+        /* Mosaico de Cards de Expositores */
         .grade-expositores { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
         .card-expositor { background: white; border-radius: 12px; border: 1px solid var(--borda); overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; transition: 0.3s; }
         .card-expositor:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(103, 58, 183, 0.1); }
@@ -40,7 +51,8 @@
         .detalhes-expositor { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
         .segmento-tag { font-size: 11px; font-weight: 800; color: var(--cor-secundaria); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
         .marca-titulo { font-size: 19px; font-weight: 700; color: #222; margin: 0 0 4px 0; text-transform: uppercase; }
-        .responsavel-nome { font-size: 13px; color: #666; margin: 0 0 15px 0; font-weight: 500; }
+        .responsavel-nome { font-size: 13px; color: #666; margin: 0 0 4px 0; font-weight: 500; }
+        .data-expositor-tag { font-size: 11px; color: var(--cor-principal); font-weight: bold; margin-bottom: 15px; background: #f5eeff; display: inline-block; padding: 2px 6px; border-radius: 4px; align-self: flex-start; }
         
         .botoes-contato { display: flex; gap: 10px; margin-top: auto; }
         .btn-rede { flex: 1; text-align: center; text-decoration: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.2s; }
@@ -48,12 +60,9 @@
         .btn-zap { background: var(--verde-zap); }
         .btn-insta { background: var(--insta-cor); }
 
-        /* Mensagem de Evento Breve / Inscrições */
         .aviso-evento-breve { grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: #fdfaff; border: 2px dashed var(--borda); border-radius: 12px; margin: 10px 20px; }
         .aviso-evento-breve h3 { margin: 0 0 8px 0; color: var(--cor-principal); font-size: 20px; text-transform: uppercase; }
         .aviso-evento-breve p { margin: 0 0 15px 0; color: #666; font-size: 14px; }
-        .btn-abrir-form { background: var(--cor-secundaria); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; }
-        .btn-breve-desabilitado { background: #bbb; color: white; border: none; padding: 10px 25px; border-radius: 20px; font-weight: bold; font-size: 12px; text-transform: uppercase; display: inline-block; }
 
         /* Seção do Formulário */
         #sessao-cadastro { display: none; padding: 25px; max-width: 550px; margin: 0 auto; background: #fff; }
@@ -77,7 +86,10 @@
         </div>
     </div>
 
-    <div id="banner-status-evento" class="banner-info-data"></div>
+    <div class="secao-agenda-datas" id="area-agenda-dinamica" style="display: none;">
+        <div class="titulo-agenda">🗓️ Agenda de Edições e Inscrições</div>
+        <div class="grade-datas-agenda" id="corpo-agenda-datas"></div>
+    </div>
 
     <div id="tela-lista">
         <div id="lista-corpo" class="grade-expositores">
@@ -91,12 +103,17 @@
             
             <form id="formIndicar">
                 <div class="aviso-privacidade">
-                    <strong>FORMULÁRIO DE INSCRIÇÃO:</strong> Preencha os dados da sua marca abaixo. Após o envio e a confirmação do pagamento, sua marca será ativada no Guia Oficial do evento selecionado.
+                    <strong>FORMULÁRIO DE INSCRIÇÃO:</strong> Envie as informações de sua marca. Após a confirmação da sua vaga na planilha, sua marca subirá na vitrine oficial.
                 </div>
                 
                 <div class="campo">
-                    <label>Espaço de Compras Desejado</label>
+                    <label>Espaço de Compras</label>
                     <input type="text" name="localEvento" id="formLocalVisivel" readonly style="background: #f5f5f5; font-weight: bold; color: var(--cor-principal);">
+                </div>
+
+                <div class="campo">
+                    <label>Data Escolhida para Expor</label>
+                    <input type="text" name="dataEvento" id="formDataVisivel" readonly style="background: #f5f5f5; font-weight: bold; color: var(--cor-secundaria);">
                 </div>
 
                 <div class="campo"><label>Nome Completo do Responsável</label><input type="text" name="contato" required></div>
@@ -115,7 +132,7 @@
                     <input type="text" id="inputSegmentoOutro" placeholder="Ex: Moda Pet Customizada">
                 </div>
 
-                <div class="campo"><label>Descreva os produtos que envolvem sua marca</label><textarea name="descricao" rows="3" required placeholder="Ex: Doces gourmet, bolos caseiros e palha italiana..."></textarea></div>
+                <div class="campo"><label>Descreva seus produtos</label><textarea name="descricao" rows="3" required placeholder="Ex: Doces gourmet, bolos caseiros..."></textarea></div>
                 <div class="campo"><label>WhatsApp Comercial (DDD+Número sem espaços)</label><input type="text" name="whatsapp" id="inputZap" required maxlength="11" placeholder="Ex: 11988887777"></div>
                 <div class="campo"><label>Instagram da Loja</label><input type="text" name="instagram" placeholder="Ex: @sualoja" required></div>
                 <div class="campo"><label>Facebook da Loja (Opcional)</label><input type="text" name="facebook" placeholder="Ex: facebook.com/sualoja"></div>
@@ -135,16 +152,17 @@
 
 <div class="banner-protecao">
     <strong>© Cláudia Dib - Espaço de Compras</strong>
-    As ativações e exibições no guia dependem da confirmação de participação no evento presencial.
+    As ativações e exibições dependem da aprovação de participação no evento.
 </div>
 
 <script>
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzSuP3NP-RfMFePmRccDP-UW_tA38xg2Y4i0nmff1fAGxMRUtEpTWfyQU2koFhvKoMzxQ/exec"; 
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzEniYs0zcffazjMFZVKOHbV-sJ_RA9XywKevtZHGF4q33uyHa3scq9iu7Qw3WwtZQD4Q/exec"; 
     
     let dadosGerais = [];
     let proximasDatas = {};
     let listaSegmentosDoBanco = [];
     let localSelecionado = "";
+    let dataSelecionadaForm = "";
 
     function mudarLocal(novoLocal, elemento) {
         document.querySelectorAll('.btn-local').forEach(b => b.classList.remove('ativo'));
@@ -154,8 +172,10 @@
         filtrarEExibir();
     }
 
-    function abrirFormulario() {
+    function abrirFormulario(dataEscolhida) {
+        dataSelecionadaForm = dataEscolhida;
         document.getElementById('formLocalVisivel').value = localSelecionado;
+        document.getElementById('formDataVisivel').value = dataSelecionadaForm;
         document.getElementById('tela-lista').style.display = "none";
         document.getElementById('sessao-cadastro').style.display = "block";
         window.scrollTo({top: 0, behavior: 'smooth'});
@@ -196,8 +216,6 @@
                 containerAbas.innerHTML = listaLocais.map((local, index) => {
                     return `<button class="btn-local ${index === 0 ? 'ativo' : ''}" onclick="mudarLocal('${local}', this)">${local}</button>`;
                 }).join('');
-            } else {
-                containerAbas.innerHTML = `<span style="font-size:12px; color:#999;">Nenhum espaço ativo encontrado na planilha</span>`;
             }
 
             const selectSeg = document.getElementById('selectSegmento');
@@ -206,103 +224,95 @@
                 listaSegmentosDoBanco.forEach(seg => {
                     htmlSeg += `<option value="${seg}">${seg}</option>`;
                 });
-                if(!listaSegmentosDoBanco.some(s => s.toLowerCase() === 'outros' || s.toLowerCase() === 'outro')) {
-                    htmlSeg += '<option value="Outros">Outros</option>';
-                }
+                htmlSeg += '<option value="Outros">Outros</option>';
                 selectSeg.innerHTML = htmlSeg;
-            } else {
-                selectSeg.innerHTML = '<option value="">Erro ao carregar segmentos da planilha</option>';
             }
             
             filtrarEExibir();
         } catch (e) { 
             document.getElementById('botoes-abas-dinamicas').innerHTML = `<span style="font-size:12px; color:#ff4444;">Erro na conexão com o banco de dados.</span>`;
-            filtrarEExibir();
         }
     }
 
     function converterData(stringData) {
         if (!stringData) return null;
-        const partes = stringData.split('/');
-        if (partes.length === 3) {
+        // Se for intervalo (ex: 23/05 a 24/05), pega a última data para cálculo de expiração
+        let alvo = stringData;
+        if(stringData.includes("a")) {
+            const partesIntervalo = stringData.split("a");
+            alvo = partesIntervalo[partesIntervalo.length - 1].trim();
+        }
+        const partes = alvo.split('/');
+        if (partes.length === 2) { // se digitado ex: 23/05
+            return new Date(new Date().getFullYear(), partes[1] - 1, partes[0]);
+        }
+        if (partes.length === 3) { // se digitado ex: 23/05/2026
             return new Date(partes[2], partes[1] - 1, partes[0]);
         }
         return null;
     }
 
-    function analisarStatusDasDatas(dadosDataBrutos) {
-        if (!dadosDataBrutos) return { status: "sem_data", texto: "" };
-        
-        const colunasDeData = dadosDataBrutos.split(',').map(d => d.trim()).filter(d => d !== "");
-        if (colunasDeData.length === 0) return { status: "sem_data", texto: "" };
-
+    function calcularStatusDaData(strData) {
         let hoje = new Date();
         hoje.setHours(0,0,0,0);
-
-        let datasConvertidas = colunasDeData.map(d => ({ str: d, obj: converterData(d) })).filter(d => d.obj !== null);
-        if (datasConvertidas.length === 0) return { status: "sem_data", texto: "" };
-
-        datasConvertidas.sort((a, b) => a.obj - b.obj);
-
-        const dataPrimeiraObj = datasConvertidas[0].obj;
-        const dataUltimaObj = datasConvertidas[datasConvertidas.length - 1].obj;
+        let dataObj = converterData(strData);
         
-        let textoPeriodo = datasConvertidas[0].str;
-        if (datasConvertidas.length >= 2) {
-            const partesPrimeira = datasConvertidas[0].str.split('/');
-            textoPeriodo = `${partesPrimeira[0]}/${partesPrimeira[1]} a ${datasConvertidas[datasConvertidas.length - 1].str}`;
+        if(!dataObj) return { classe: "status-futuro", texto: "Inscrições Abertas", disabled: false };
+        
+        if(hoje.getTime() === dataObj.getTime()) {
+            return { classe: "status-ativo", texto: "💥 Acontecendo Hoje", disabled: true };
         }
-
-        if (hoje >= dataPrimeiraObj && hoje <= dataUltimaObj) {
-            return { status: "ativo", texto: textoPeriodo };
+        if(hoje > dataObj) {
+            return { classe: "status-passado", texto: "Encerrado 🔒", disabled: true };
         }
-        if (hoje < dataPrimeiraObj) {
-            return { status: "futuro", texto: textoPeriodo };
-        }
-        return { status: "passado", texto: "" };
+        return { classe: "status-futuro", texto: "Inscrições Abertas", disabled: false };
     }
 
     function filtrarEExibir() {
         const corpo = document.getElementById('lista-corpo');
-        const bannerStatus = document.getElementById('banner-status-evento');
+        const areaAgenda = document.getElementById('area-agenda-dinamica');
+        const corpoAgenda = document.getElementById('corpo-agenda-datas');
         
         if (!localSelecionado) return;
 
         const filtrados = dadosGerais.filter(i => i.localEvento === localSelecionado);
-        const dadosDataBrutos = proximasDatas[localSelecionado] || "";
-        const analiseData = analisarStatusDasDatas(dadosDataBrutos);
+        const arrayDeDatasDoLocal = proximasDatas[localSelecionado] || [];
 
-        if (analiseData.status === "ativo") {
-            bannerStatus.style.display = "block";
-            bannerStatus.innerHTML = `✨ <strong>O evento começou!</strong> Confira as marcas presentes, entre em contato e antecipe suas compras ou encomendas direto pelo WhatsApp!`;
-        } else if (analiseData.status === "futuro") {
-            bannerStatus.style.display = "block";
-            bannerStatus.innerHTML = `📅 <strong>Próxima Edição Confirmada:</strong> De ${analiseData.texto}. Faça seu planejamento!`;
+        // Monta o Mosaico de Agendas se houver datas cadastradas
+        if (arrayDeDatasDoLocal.length > 0) {
+            areaAgenda.style.display = "block";
+            corpoAgenda.innerHTML = arrayDeDatasDoLocal.map(dt => {
+                const infoStatus = calcularStatusDaData(dt);
+                return `
+                    <div class="card-data-status">
+                        <div class="data-texto">📅 ${dt}</div>
+                        <span class="selo-status ${infoStatus.classe}">${infoStatus.texto}</span>
+                        <button class="btn-acao-agenda" ${infoStatus.disabled ? 'disabled' : ''} onclick="abrirFormulario('${dt}')">
+                            ${infoStatus.disabled ? 'Bloqueado' : 'Inscrever ➕'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
         } else {
-            bannerStatus.style.display = "none";
+            // Se não houver absolutamente nenhuma data na linha da planilha para esse local
+            areaAgenda.style.display = "block";
+            corpoAgenda.innerHTML = `
+                <div class="card-data-status" style="min-width: 250px;">
+                    <div class="data-texto">📢 EM BREVE NOVAS INSCRIÇÕES!</div>
+                    <span class="selo-status status-passado">Inscrições em Breve 🔒</span>
+                    <button class="btn-acao-agenda" disabled>Aguardando Calendário</button>
+                </div>
+            `;
         }
         
         if (filtrados.length === 0) {
-            if (analiseData.status === "futuro" || analiseData.status === "ativo") {
-                corpo.innerHTML = `
-                    <div class="aviso-evento-breve">
-                        <h3>🏛️ ${localSelecionado}</h3>
-                        <p>📅 <strong>DATA DO EVENTO: ${analiseData.texto}</strong></p>
-                        <p>As inscrições de expositores para esta edição estão abertas!</p>
-                        <button class="btn-abrir-form" onclick="abrirFormulario()">Quero Participar ➕</button>
-                    </div>
-                `;
-            } else {
-                // ALTERADO AQUI: Texto e comportamento de "Em breve" caso não haja data definida
-                corpo.innerHTML = `
-                    <div class="aviso-evento-breve">
-                        <h3>🏛️ ${localSelecionado}</h3>
-                        <p>📢 <strong>EM BREVE NOVAS INSCRIÇÕES!</strong></p>
-                        <p>Estamos estruturando o calendário e organizando a próxima edição deste espaço. Fique de olho aqui ou nas nossas redes sociais!</p>
-                        <span class="btn-breve-desabilitado">Em breve novas inscrições 🔒</span>
-                    </div>
-                `;
-            }
+            corpo.innerHTML = `
+                <div class="aviso-evento-breve">
+                    <h3>🏛️ ${localSelecionado}</h3>
+                    <p>Nenhuma marca ativa na vitrine deste local no momento.</p>
+                    <p style="font-size:12px; color:#666;">Escolha uma das datas na agenda acima para realizar a sua inscrição oficial!</p>
+                </div>
+            `;
             return;
         }
         
@@ -322,6 +332,7 @@
                         <span class="segmento-tag">🛍️ ${item.segmento || "Geral"}</span>
                         <h3 class="marca-titulo">${item.marca || "Expositor"}</h3>
                         <p class="responsavel-nome">👤 Por: ${item.contato}</p>
+                        <span class="data-expositor-tag">🗓️ Edição: ${item.dataEvento || "Confirmada"}</span>
                         
                         <div class="botoes-contato">
                             <a href="${item.whatsapp}" class="btn-rede btn-zap" target="_blank">📱 WhatsApp</a>
@@ -331,21 +342,6 @@
                 </div>
             `;
         }).join('');
-        
-        // Só exibe o botão inferior para se inscrever caso haja uma data ativa ou futura rolando
-        if (analiseData.status === "futuro" || analiseData.status === "ativo") {
-            corpo.innerHTML += `
-                <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
-                    <button class="btn-abrir-form" style="background: var(--cor-principal);" onclick="abrirFormulario()">Quero expor neste local ➕</button>
-                </div>
-            `;
-        } else {
-            corpo.innerHTML += `
-                <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
-                    <span class="btn-breve-desabilitado" style="background: var(--cor-principal); opacity: 0.7;">Inscrições fechadas para este local</span>
-                </div>
-            `;
-        }
     }
 
     const inputZap = document.getElementById('inputZap');
@@ -366,7 +362,6 @@
         reader.onload = async function () {
             const base64Data = reader.result.split(',')[1];
             const formData = new FormData(e.target);
-            const dataHoje = new Date().toLocaleDateString('pt-BR');
             
             let segmentoSelecionado = formData.get('segmento');
             if(segmentoSelecionado.toLowerCase() === 'outros' || segmentoSelecionado.toLowerCase() === 'outro') {
@@ -386,7 +381,7 @@
                 tiktok: formData.get('tiktok') || "",
                 eventoAnterior: formData.get('eventoAnterior'),
                 localEvento: localSelecionado,
-                dataEvento: dataHoje,
+                dataEvento: dataSelecionadaForm, // Envia a data específica selecionada no card
                 arquivoData: base64Data,
                 arquivoNome: file.name,
                 arquivoMime: file.type
@@ -398,8 +393,8 @@
                     <div style="text-align: center; padding: 30px;">
                         <div style="font-size: 40px;">🎉</div>
                         <h2 style="color: var(--cor-principal);">Inscrição Recebida!</h2>
-                        <p>Seus dados e sua foto foram enviados com sucesso para a análise da Cláudia Dib.</p>
-                        <p style="font-size:13px; color:#666;">Assim que a confirmação for realizada na planilha, sua marca subirá para a vitrine do evento!</p>
+                        <p>Sua marca foi registrada para o evento de <strong>${dataSelecionadaForm}</strong> em <strong>${localSelecionado}</strong>.</p>
+                        <p style="font-size:13px; color:#666;">Assim que a sua vaga for aprovada na planilha, sua marca subirá automaticamente na vitrine!</p>
                         <button onclick="location.reload()" class="btn-enviar">VOLTAR PARA A VITRINE</button>
                     </div>
                 `;
