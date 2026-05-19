@@ -156,7 +156,7 @@
 </div>
 
 <script>
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzPIQRC8ii3JKOIslW8eQjseUU6IoeLCUf68F51ZnG0uYEX7k1byS_l3uVCdHL1lQoWGg/exec"; 
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzSuP3NP-RfMFePmRccDP-UW_tA38xg2Y4i0nmff1fAGxMRUtEpTWfyQU2koFhvKoMzxQ/exec"; 
     
     let dadosGerais = [];
     let proximasDatas = {};
@@ -199,6 +199,18 @@
         }
     }
 
+    function formatarDataDoBanco(dataBruta) {
+        if (!dataBruta) return "Confirmada";
+        if (dataBruta.toString().includes("GMT")) {
+            try {
+                return new Date(dataBruta).toLocaleDateString('pt-BR');
+            } catch(e) {
+                return dataBruta;
+            }
+        }
+        return dataBruta;
+    }
+
     async function buscarDados() {
         try {
             const res = await fetch(URL_SCRIPT);
@@ -236,17 +248,16 @@
 
     function converterData(stringData) {
         if (!stringData) return null;
-        // Se for intervalo (ex: 23/05 a 24/05), pega a última data para cálculo de expiração
         let alvo = stringData;
         if(stringData.includes("a")) {
             const partesIntervalo = stringData.split("a");
             alvo = partesIntervalo[partesIntervalo.length - 1].trim();
         }
         const partes = alvo.split('/');
-        if (partes.length === 2) { // se digitado ex: 23/05
+        if (partes.length === 2) { 
             return new Date(new Date().getFullYear(), partes[1] - 1, partes[0]);
         }
-        if (partes.length === 3) { // se digitado ex: 23/05/2026
+        if (partes.length === 3) { 
             return new Date(partes[2], partes[1] - 1, partes[0]);
         }
         return null;
@@ -278,7 +289,6 @@
         const filtrados = dadosGerais.filter(i => i.localEvento === localSelecionado);
         const arrayDeDatasDoLocal = proximasDatas[localSelecionado] || [];
 
-        // Monta o Mosaico de Agendas se houver datas cadastradas
         if (arrayDeDatasDoLocal.length > 0) {
             areaAgenda.style.display = "block";
             corpoAgenda.innerHTML = arrayDeDatasDoLocal.map(dt => {
@@ -294,7 +304,6 @@
                 `;
             }).join('');
         } else {
-            // Se não houver absolutamente nenhuma data na linha da planilha para esse local
             areaAgenda.style.display = "block";
             corpoAgenda.innerHTML = `
                 <div class="card-data-status" style="min-width: 250px;">
@@ -325,6 +334,9 @@
                 botaoInsta = `<a href="${item.instagram}" class="btn-rede btn-insta" target="_blank">📸 Instagram</a>`;
             }
 
+            // CORREÇÃO DA DATA: Passa pela função de formatação antes de renderizar
+            let dataFormatadaExpositor = formatarDataDoBanco(item.dataEvento);
+
             return `
                 <div class="card-expositor">
                     <img src="${urlFoto}" class="foto-expositor" onerror="this.src='https://via.placeholder.com/400?text=Espaço+de+Compras'">
@@ -332,7 +344,7 @@
                         <span class="segmento-tag">🛍️ ${item.segmento || "Geral"}</span>
                         <h3 class="marca-titulo">${item.marca || "Expositor"}</h3>
                         <p class="responsavel-nome">👤 Por: ${item.contato}</p>
-                        <span class="data-expositor-tag">🗓️ Edição: ${item.dataEvento || "Confirmada"}</span>
+                        <span class="data-expositor-tag">🗓️ Edição: ${dataFormatadaExpositor}</span>
                         
                         <div class="botoes-contato">
                             <a href="${item.whatsapp}" class="btn-rede btn-zap" target="_blank">📱 WhatsApp</a>
@@ -381,7 +393,7 @@
                 tiktok: formData.get('tiktok') || "",
                 eventoAnterior: formData.get('eventoAnterior'),
                 localEvento: localSelecionado,
-                dataEvento: dataSelecionadaForm, // Envia a data específica selecionada no card
+                dataEvento: dataSelecionadaForm, 
                 arquivoData: base64Data,
                 arquivoNome: file.name,
                 arquivoMime: file.type
