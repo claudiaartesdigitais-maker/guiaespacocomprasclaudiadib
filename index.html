@@ -138,8 +138,8 @@
 </div>
 
 <script>
-    // Link do Apps Script do seu último deploy
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxa-entsdC6zlMiEyCyQmsiXXlCrCvNeueh70G6MlxnmiC6d2I45-w2hBs0orpZtE5FKA/exec"; 
+    // Link do Apps Script ATUALIZADO e testado!
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzSuP3NP-RfMFePmRccDP-UW_tA38xg2Y4i0nmff1fAGxMRUtEpTWfyQU2koFhvKoMzxQ/exec"; 
     
     let dadosGerais = [];
     let proximasDatas = {};
@@ -193,7 +193,7 @@
             const listaLocais = pacoteData.locais || [];
             
             if(listaLocais.length > 0) {
-                localSelecionado = listaLocais[0]; // Seleciona o primeiro local por padrão
+                localSelecionado = listaLocais[0]; 
                 containerAbas.innerHTML = listaLocais.map((local, index) => {
                     return `<button class="btn-local ${index === 0 ? 'ativo' : ''}" onclick="mudarLocal('${local}', this)">${local}</button>`;
                 }).join('');
@@ -208,7 +208,6 @@
                 listaSegmentosDoBanco.forEach(seg => {
                     htmlSeg += `<option value="${seg}">${seg}</option>`;
                 });
-                // Garante a existência da opção "Outros" caso ela não esteja listada na planilha
                 if(!listaSegmentosDoBanco.some(s => s.toLowerCase() === 'outros' || s.toLowerCase() === 'outro')) {
                     htmlSeg += '<option value="Outros">Outros</option>';
                 }
@@ -245,7 +244,6 @@
         let datasConvertidas = colunasDeData.map(d => ({ str: d, obj: converterData(d) })).filter(d => d.obj !== null);
         if (datasConvertidas.length === 0) return { status: "sem_data", texto: "" };
 
-        // Organiza as datas por ordem cronológica
         datasConvertidas.sort((a, b) => a.obj - b.obj);
 
         const dataPrimeiraObj = datasConvertidas[0].obj;
@@ -257,15 +255,12 @@
             textoPeriodo = `${partesPrimeira[0]}/${partesPrimeira[1]} a ${datasConvertidas[datasConvertidas.length - 1].str}`;
         }
 
-        // Caso 1: O dia atual está dentro do intervalo do evento (Evento Acontecendo)
         if (hoje >= dataPrimeiraObj && hoje <= dataUltimaObj) {
             return { status: "ativo", texto: textoPeriodo };
         }
-        // Caso 2: O evento completo está no futuro
         if (hoje < dataPrimeiraObj) {
             return { status: "futuro", texto: textoPeriodo };
         }
-        // Caso 3: O evento já passou completamente
         return { status: "passado", texto: "" };
     }
 
@@ -279,7 +274,6 @@
         const dadosDataBrutos = proximasDatas[localSelecionado] || "";
         const analiseData = analisarStatusDasDatas(dadosDataBrutos);
 
-        // CONFIGURAÇÃO DO BANNER SUPERIOR DE AVISO DE ACORDO COM O STATUS DA DATA
         if (analiseData.status === "ativo") {
             bannerStatus.style.display = "block";
             bannerStatus.innerHTML = `✨ <strong>O evento começou!</strong> Confira as marcas presentes, entre em contato e antecipe suas compras ou encomendas direto pelo WhatsApp!`;
@@ -290,7 +284,6 @@
             bannerStatus.style.display = "none";
         }
         
-        // SE NÃO HOUVER EXPOSITORES CADASTRADOS E LIBERADOS COM "SIM"
         if (filtrados.length === 0) {
             if (analiseData.status === "futuro" || analiseData.status === "ativo") {
                 corpo.innerHTML = `
@@ -314,7 +307,6 @@
             return;
         }
         
-        // SE HOUVER EXPOSITORES ATIVOS, MONTA OS CARDS
         corpo.innerHTML = filtrados.map(item => {
             let urlFoto = item.foto || "";
             if(!urlFoto) urlFoto = 'https://via.placeholder.com/400?text=Espaço+de+Compras';
@@ -341,7 +333,6 @@
             `;
         }).join('');
         
-        // ADICIONA O BOTÃO DE INSCRIÇÃO SEMPRE NO FINAL DA LISTA DE CARDS
         corpo.innerHTML += `
             <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
                 <button class="btn-abrir-form" style="background: var(--cor-principal);" onclick="abrirFormulario()">Quero expor neste local ➕</button>
@@ -369,7 +360,6 @@
             const formData = new FormData(e.target);
             const dataHoje = new Date().toLocaleDateString('pt-BR');
             
-            // TRATAMENTO DA OPÇÃO DE SEGMENTO PERSONALIZADO "OUTROS"
             let segmentoSelecionado = formData.get('segmento');
             if(segmentoSelecionado.toLowerCase() === 'outros' || segmentoSelecionado.toLowerCase() === 'outro') {
                 segmentoSelecionado = document.getElementById('inputSegmentoOutro').value.trim();
