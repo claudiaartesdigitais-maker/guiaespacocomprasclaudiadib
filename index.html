@@ -334,7 +334,6 @@
                 botaoInsta = `<a href="${item.instagram}" class="btn-rede btn-insta" target="_blank">📸 Instagram</a>`;
             }
 
-            // CORREÇÃO DA DATA: Passa pela função de formatação antes de renderizar
             let dataFormatadaExpositor = formatarDataDoBanco(item.dataEvento);
 
             return `
@@ -400,7 +399,8 @@
             };
             
             try {
-                await fetch(URL_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(objeto) });
+                // CORREÇÃO DA ABA ANÔNIMA: Mudado para 'cors'
+                await fetch(URL_SCRIPT, { method: 'POST', mode: 'cors', body: JSON.stringify(objeto) });
                 document.getElementById('conteudo-form').innerHTML = `
                     <div style="text-align: center; padding: 30px;">
                         <div style="font-size: 40px;">🎉</div>
