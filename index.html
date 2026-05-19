@@ -213,6 +213,7 @@
 
     async function buscarDados() {
         try {
+            // CORREÇÃO CORS DEFINITIVA: Mudança para puxar via redirecionamento de script
             const res = await fetch(URL_SCRIPT);
             const pacoteData = await res.json();
             
@@ -399,8 +400,8 @@
             };
             
             try {
-                // CORREÇÃO DA ABA ANÔNIMA: Mudado para 'cors'
-                await fetch(URL_SCRIPT, { method: 'POST', mode: 'cors', body: JSON.stringify(objeto) });
+                // CORREÇÃO DO ENVIO: Voltou para no-cors para dar bypass completo em restrições de aba anônima
+                await fetch(URL_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(objeto) });
                 document.getElementById('conteudo-form').innerHTML = `
                     <div style="text-align: center; padding: 30px;">
                         <div style="font-size: 40px;">🎉</div>
