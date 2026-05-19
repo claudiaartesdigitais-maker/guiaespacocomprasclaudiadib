@@ -53,6 +53,7 @@
         .aviso-evento-breve h3 { margin: 0 0 8px 0; color: var(--cor-principal); font-size: 20px; text-transform: uppercase; }
         .aviso-evento-breve p { margin: 0 0 15px 0; color: #666; font-size: 14px; }
         .btn-abrir-form { background: var(--cor-secundaria); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; }
+        .btn-breve-desabilitado { background: #bbb; color: white; border: none; padding: 10px 25px; border-radius: 20px; font-weight: bold; font-size: 12px; text-transform: uppercase; display: inline-block; }
 
         /* Seção do Formulário */
         #sessao-cadastro { display: none; padding: 25px; max-width: 550px; margin: 0 auto; background: #fff; }
@@ -138,8 +139,7 @@
 </div>
 
 <script>
-    // Link do Apps Script ATUALIZADO e testado!
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwEO0FW3iMUx_4lr4LJEmMcMEP89g4QPml_mmfcCuo1K6c4oCWkv1MKjWUf3_dGZ1UIlw/exec"; 
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzSuP3NP-RfMFePmRccDP-UW_tA38xg2Y4i0nmff1fAGxMRUtEpTWfyQU2koFhvKoMzxQ/exec"; 
     
     let dadosGerais = [];
     let proximasDatas = {};
@@ -188,7 +188,6 @@
             proximasDatas = pacoteData.proximasDatas || {};
             listaSegmentosDoBanco = pacoteData.segmentos || [];
             
-            // 1. MONTA OS BOTÕES DE LOCAIS DE FORMA DINÂMICA
             const containerAbas = document.getElementById('botoes-abas-dinamicas');
             const listaLocais = pacoteData.locais || [];
             
@@ -201,7 +200,6 @@
                 containerAbas.innerHTML = `<span style="font-size:12px; color:#999;">Nenhum espaço ativo encontrado na planilha</span>`;
             }
 
-            // 2. MONTA A LISTA SUSPENSA DE SEGMENTOS DE FORMA DINÂMICA
             const selectSeg = document.getElementById('selectSegmento');
             if(listaSegmentosDoBanco.length > 0) {
                 let htmlSeg = '<option value="">Selecione o seu segmento...</option>';
@@ -295,12 +293,13 @@
                     </div>
                 `;
             } else {
+                // ALTERADO AQUI: Texto e comportamento de "Em breve" caso não haja data definida
                 corpo.innerHTML = `
                     <div class="aviso-evento-breve">
                         <h3>🏛️ ${localSelecionado}</h3>
-                        <p>📢 <strong>EM BREVE NOVO EVENTO!</strong></p>
-                        <p>Estamos preparando a próxima edição deste espaço. Acompanhe as nossas redes sociais para saber as próximas datas em primeira mão!</p>
-                        <button class="btn-abrir-form" onclick="abrirFormulario()">Quero me cadastrar para vagas ➕</button>
+                        <p>📢 <strong>EM BREVE NOVAS INSCRIÇÕES!</strong></p>
+                        <p>Estamos estruturando o calendário e organizando a próxima edição deste espaço. Fique de olho aqui ou nas nossas redes sociais!</p>
+                        <span class="btn-breve-desabilitado">Em breve novas inscrições 🔒</span>
                     </div>
                 `;
             }
@@ -333,11 +332,20 @@
             `;
         }).join('');
         
-        corpo.innerHTML += `
-            <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
-                <button class="btn-abrir-form" style="background: var(--cor-principal);" onclick="abrirFormulario()">Quero expor neste local ➕</button>
-            </div>
-        `;
+        // Só exibe o botão inferior para se inscrever caso haja uma data ativa ou futura rolando
+        if (analiseData.status === "futuro" || analiseData.status === "ativo") {
+            corpo.innerHTML += `
+                <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
+                    <button class="btn-abrir-form" style="background: var(--cor-principal);" onclick="abrirFormulario()">Quero expor neste local ➕</button>
+                </div>
+            `;
+        } else {
+            corpo.innerHTML += `
+                <div style="grid-column: 1/-1; text-align: center; padding: 20px;">
+                    <span class="btn-breve-desabilitado" style="background: var(--cor-principal); opacity: 0.7;">Inscrições fechadas para este local</span>
+                </div>
+            `;
+        }
     }
 
     const inputZap = document.getElementById('inputZap');
