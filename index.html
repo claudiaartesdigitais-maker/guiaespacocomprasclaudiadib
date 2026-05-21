@@ -30,7 +30,7 @@
         .secao-agenda-datas { background: #fffbff; border-bottom: 1px solid var(--borda); padding: 15px 20px; }
         .titulo-agenda { font-size: 13px; font-weight: bold; color: var(--cor-principal); margin: 0 0 12px 0; text-transform: uppercase; text-align: center; }
 
-        .grade-datas-agenda { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .grade-datas-agenda { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 15px; }
         
         .card-data-status { background: white; border: 1px solid var(--borda); border-radius: 8px; padding: 10px 15px; display: flex; flex-direction: column; align-items: center; min-width: 140px; box-shadow: 0 2px 5px rgba(0,0,0,0.01); text-align: center; }
         .card-data-status .data-texto { font-weight: bold; font-size: 14px; color: #222; margin-bottom: 4px; }
@@ -42,6 +42,9 @@
         .btn-acao-agenda { background: var(--cor-secundaria); color: white; border: none; padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .btn-acao-agenda:disabled { background: #ccc; cursor: not-allowed; }
 
+        /* Nova Frase de Destaque Geral (Posicionada abaixo da Agenda) */
+        .frase-chamada-geral { max-width: 700px; margin: 10px auto 5px auto; text-align: center; font-size: 13px; color: #673ab7; font-weight: bold; background: #fdf6ff; border: 1px dashed #dcaeff; padding: 10px 15px; border-radius: 8px; line-height: 1.4; box-shadow: 0 2px 6px rgba(103, 58, 183, 0.03); }
+
         /* Mosaico de Cards de Expositores */
         .grade-expositores { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
         .card-expositor { background: white; border-radius: 12px; border: 1px solid var(--borda); overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; transition: 0.3s; }
@@ -50,12 +53,15 @@
         .foto-expositor { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: #f5f5f5; border-bottom: 1px solid var(--borda); }
         
         .detalhes-expositor { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
-        .segmento-tag { font-size: 11px; font-weight: 800; color: var(--cor-secundaria); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        
+        /* Modificado para comportar a descrição da Coluna E */
+        .descricao-trabalho-tag { font-size: 11px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px; line-height: 1.4; background: #f5f5f5; padding: 6px 8px; border-radius: 6px; border-left: 3px solid var(--cor-secundaria); }
+        
         .marca-titulo { font-size: 19px; font-weight: 700; color: #222; margin: 0 0 4px 0; text-transform: uppercase; }
         .responsavel-nome { font-size: 13px; color: #666; margin: 0 0 4px 0; font-weight: 500; }
         .data-expositor-tag { font-size: 11px; color: var(--cor-principal); font-weight: bold; margin-bottom: 12px; background: #f5eeff; display: inline-block; padding: 2px 6px; border-radius: 4px; align-self: flex-start; }
         
-        /* Estilo da Frase Oficial dentro do card preenchido */
+        /* Nova chamada interna sugerida anteriormente */
         .frase-chamada-card { font-size: 11px; color: #673ab7; font-weight: bold; margin-bottom: 12px; background: #fdf6ff; border: 1px dashed #dcaeff; padding: 6px; border-radius: 6px; line-height: 1.3; }
 
         .botoes-contato { display: flex; gap: 10px; margin-top: auto; }
@@ -93,6 +99,10 @@
     <div class="secao-agenda-datas" id="area-agenda-dinamica" style="display: none;">
         <div class="titulo-agenda">🗓️ Agenda de Edições e Inscrições</div>
         <div class="grade-datas-agenda" id="corpo-agenda-datas"></div>
+        
+        <div class="frase-chamada-geral">
+            📣 Confira as marcas presentes, entre em contato e antecipe suas compras ou encomendas direto pelo WhatsApp!
+        </div>
     </div>
 
     <div id="tela-lista">
@@ -203,16 +213,22 @@
         }
     }
 
+    // Limpa a data eliminando textos residuais de horário (como 10:00:00)
     function formatarDataDoBanco(dataBruta) {
         if (!dataBruta) return "Confirmada";
-        if (dataBruta.toString().includes("GMT")) {
+        let str = dataBruta.toString();
+        if (str.includes("GMT") || str.includes(":") || str.includes("-")) {
             try {
-                return new Date(dataBruta).toLocaleDateString('pt-BR');
-            } catch(e) {
-                return dataBruta;
-            }
+                let d = new Date(dataBruta);
+                if (!isNaN(d.getTime())) {
+                    return d.toLocaleDateString('pt-BR');
+                }
+            } catch(e) {}
         }
-        return dataBruta;
+        if (str.includes(" ")) {
+            str = str.split(" ")[0];
+        }
+        return str;
     }
 
     async function buscarDados() {
@@ -252,9 +268,10 @@
 
     function converterData(stringData) {
         if (!stringData) return null;
-        let alvo = stringData;
-        if(stringData.includes("a")) {
-            const partesIntervalo = stringData.split("a");
+        let alvo = stringData.toString();
+        if(alvo.includes(" ")) alvo = alvo.split(" ")[0];
+        if(alvo.includes("a")) {
+            const partesIntervalo = alvo.split("a");
             alvo = partesIntervalo[partesIntervalo.length - 1].trim();
         }
         const partes = alvo.split('/');
@@ -297,11 +314,12 @@
             areaAgenda.style.display = "block";
             corpoAgenda.innerHTML = arrayDeDatasDoLocal.map(dt => {
                 const infoStatus = calcularStatusDaData(dt);
+                const dataLimpaVisual = formatarDataDoBanco(dt); // Limpa o 10:00:00 da exibição
                 return `
                     <div class="card-data-status">
-                        <div class="data-texto">📅 ${dt}</div>
+                        <div class="data-texto">📅 ${dataLimpaVisual}</div>
                         <span class="selo-status ${infoStatus.classe}">${infoStatus.texto}</span>
-                        <button class="btn-acao-agenda" ${infoStatus.disabled ? 'disabled' : ''} onclick="abrirFormulario('${dt}')">
+                        <button class="btn-acao-agenda" ${infoStatus.disabled ? 'disabled' : ''} onclick="abrirFormulario('${dataLimpaVisual}')">
                             ${infoStatus.disabled ? 'Bloqueado' : 'Inscrever ➕'}
                         </button>
                     </div>
@@ -344,21 +362,37 @@
 
             let dataFormatadaExpositor = formatarDataDoBanco(item.dataEvento);
 
-            // ALTERAÇÃO SOLICITADA: Exibe a frase apenas se houver uma data definida vinda do banco
+            // Frase opcional por card (Fale comigo) mantida como opcional caso queira usar futuramente
             let htmlFraseChamada = "";
-            if (item.dataEvento && item.dataEvento !== "Confirmada" && item.dataEvento.trim() !== "") {
-                htmlFraseChamada = `<div class="frase-chamada-card">📣 O evento começou! Confira as marcas presentes, entre em contato e antecipe suas compras ou encomendas direto pelo WhatsApp!</div>`;
+            if (item.dataEvento && item.dataEvento !== "Confirmada" && item.dataEvento.toString().trim() !== "") {
+                htmlFraseChamada = `<div class="frase-chamada-card">📣 Antecipe suas compras, fale comigo</div>`;
+            }
+
+            // [MUDANÇA VERDE]: Lê a coluna E (Virá mapeada como item.descricao da planilha)
+            let descricaoTrabalhoColunaE = item.descricao && item.descricao.trim() !== "" ? item.descricao : "Artesanato & Variedades";
+
+            // [MUDANÇA ANTERIOR]: Se a coluna Q ("Saiba Mais") estiver preenchida, mantém a exibição discreta
+            let htmlDescricaoExpositor = "";
+            if (item.descricaoCurta && item.descricaoCurta.trim() !== "") {
+                htmlDescricaoExpositor = `
+                    <div style="font-size: 12px; margin-bottom: 10px; color: #444; line-height: 1.4;">
+                        <strong style="color: var(--cor-principal); display: block; margin-bottom: 2px;">Saiba Mais:</strong>
+                        <span style="font-style: italic;">"${item.descricaoCurta}"</span>
+                    </div>
+                `;
             }
 
             return `
                 <div class="card-expositor">
                     <img src="${urlFoto}" class="foto-expositor" onerror="this.src='https://via.placeholder.com/400?text=Espaço+de+Compras'">
                     <div class="detalhes-expositor">
-                        <span class="segmento-tag">🛍️ ${item.segmento || "Geral"}</span>
+                        <div class="descricao-trabalho-tag">🎨 ${descricaoTrabalhoColunaE}</div>
+                        
                         <h3 class="marca-titulo">${item.marca || "Expositor"}</h3>
                         <p class="responsavel-nome">👤 Por: ${item.contato}</p>
                         <span class="data-expositor-tag">🗓️ Edição: ${dataFormatadaExpositor}</span>
                         
+                        ${htmlDescricaoExpositor}
                         ${htmlFraseChamada}
                         
                         <div class="botoes-contato">
