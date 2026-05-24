@@ -19,6 +19,8 @@
         
         .container-guia { background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--borda); margin: 15px; flex-grow: 1; box-shadow: 0 4px 15px rgba(103, 58, 183, 0.08); }
 
+        .capa-superior { width: 100%; display: block; height: auto; object-fit: cover; }
+
         .header-locais { background: #a8a1c9; border-bottom: 2px solid var(--fundo-claro); padding: 15px; text-align: center; }
         .header-locais h2 { margin: 0 0 12px 0; font-size: 16px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
         
@@ -83,6 +85,8 @@
 <body>
 
 <div class="container-guia">
+    <img src="https://raw.githubusercontent.com/claudiaartesdigitais-maker/guiaespacocomprasclaudiadib/main/capa.png" alt="Capa Espaço de Compras" class="capa-superior">
+
     <div class="header-locais">
         <h2>Selecione o Espaço de Compras</h2>
         <div class="abas-locais" id="botoes-abas-dinamicas">
@@ -335,7 +339,6 @@
             return;
         }
         
-        // Mantém a frase visível para qualquer local que contenha marcas ativas
         if (fraseAgenda) {
             fraseAgenda.style.display = "block";
         }
