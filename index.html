@@ -19,29 +19,18 @@
         
         .container-guia { background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--borda); margin: 15px; flex-grow: 1; box-shadow: 0 4px 15px rgba(103, 58, 183, 0.08); }
 
-        /* === 1. CAPA FIXA === */
-        .area-capa-topo { width: 100%; overflow: hidden; background: #fcfaff; display: flex; justify-content: center; }
-        .area-capa-topo img { width: 100%; max-width: 100%; height: auto; object-fit: cover; display: block; }
-
-        /* === 2. CARROSSEL DE FOTOS (COLUNA B) === */
-        .secao-carrossel-fotos { width: 100%; position: relative; background: #fff; padding: 15px 0; border-bottom: 1px solid var(--borda); display: none; margin-bottom: 10px; }
-        .carrossel-container { overflow-x: auto; display: flex; gap: 15px; padding: 0 20px; scroll-snap-type: x mandatory; scrollbar-width: none; }
-        .carrossel-container::-webkit-scrollbar { display: none; }
-        .slide-foto { flex: 0 0 80%; scroll-snap-align: center; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08); aspect-ratio: 16 / 9; background: #f5f5f5; }
-        .slide-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-        /* === 3. SELEÇÃO DE LOCAIS === */
-        .header-locais { background: var(--cor-principal); border-bottom: 2px solid var(--cor-secundaria); padding: 15px; text-align: center; }
+        .header-locais { background: #a8a1c9; border-bottom: 2px solid var(--fundo-claro); padding: 15px; text-align: center; }
         .header-locais h2 { margin: 0 0 12px 0; font-size: 16px; color: #fff; text-transform: uppercase; letter-spacing: 1px; }
         
         .abas-locais { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .btn-local { background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.4); padding: 10px 18px; border-radius: 25px; cursor: pointer; color: #fff; font-weight: bold; font-size: 12px; text-transform: uppercase; transition: 0.3s; }
-        .btn-local.ativo { background: white; color: var(--cor-principal); border-color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .btn-local { background: #fff; border: 2px solid var(--borda); padding: 10px 18px; border-radius: 25px; cursor: pointer; color: var(--cor-principal); font-weight: bold; font-size: 12px; text-transform: uppercase; transition: 0.3s; }
+        .btn-local.ativo { background: var(--cor-principal); color: white; border-color: var(--cor-principal); box-shadow: 0 4px 10px rgba(103, 58, 183, 0.3); }
 
         /* Mosaico Superior de Agendas */
-        .secao-agenda-datas { background: #fffbff; border-bottom: 1px solid var(--borda); padding: 15px 20px; }
+        .secao-agenda-datas { background: #fffbff; border-bottom: 1px solid var(--borda); padding: 15px 20px; text-align: center; }
         .titulo-agenda { font-size: 13px; font-weight: bold; color: var(--cor-principal); margin: 0 0 12px 0; text-transform: uppercase; text-align: center; }
-        .grade-datas-agenda { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 15px; }
+
+        .grade-datas-agenda { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
         
         .card-data-status { background: white; border: 1px solid var(--borda); border-radius: 8px; padding: 10px 15px; display: flex; flex-direction: column; align-items: center; min-width: 140px; box-shadow: 0 2px 5px rgba(0,0,0,0.01); text-align: center; }
         .card-data-status .data-texto { font-weight: bold; font-size: 14px; color: #222; margin-bottom: 4px; }
@@ -50,32 +39,28 @@
         .status-ativo { background: #fff3e0; color: #ef6c00; }
         .status-passado { background: #ffebee; color: #c62828; }
         
-        .btn-acao-agenda { background: var(--cor-secundaria); color: white; border: none; padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .btn-acao-agenda { background: #d70f76; color: white; border: none; padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .btn-acao-agenda:disabled { background: #ccc; cursor: not-allowed; }
 
-        .frase-chamada-geral { max-width: 700px; margin: 10px auto 5px auto; text-align: center; font-size: 13px; color: #673ab7; font-weight: bold; background: #fdf6ff; border: 1px dashed #dcaeff; padding: 10px 15px; border-radius: 8px; line-height: 1.4; box-shadow: 0 2px 6px rgba(103, 58, 183, 0.03); }
+        /* Estilo para a frase oficial posicionada abaixo dos botões cor de rosa */
+        .banner-chamada-agenda { display: none; max-width: 800px; margin: 15px auto 0 auto; font-size: 12px; color: #673ab7; font-weight: bold; background: #fdf6ff; border: 1px dashed #dcaeff; padding: 10px; border-radius: 8px; text-align: center; line-height: 1.4; }
 
         /* Mosaico de Cards de Expositores */
         .grade-expositores { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
         .card-expositor { background: white; border-radius: 12px; border: 1px solid var(--borda); overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.02); display: flex; flex-direction: column; transition: 0.3s; }
         .card-expositor:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(103, 58, 183, 0.1); }
         
-        /* CONTAINER MENOR PARA A FOTO (80%) */
-        .container-foto-recolhida { width: 100%; background: #fff; padding: 15px 0 15px 0; display: flex; justify-content: center; align-items: center; box-sizing: border-box; }
-        .link-foto-clicavel { width: 80%; aspect-ratio: 1 / 1; display: block; overflow: hidden; position: relative; cursor: pointer; border-radius: 8px; border: 1px solid #eee; }
-        .foto-expositor { width: 100%; height: 100%; object-fit: cover; background: #f5f5f5; display: block; }
+        .foto-expositor { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background: #f5f5f5; border-bottom: 1px solid var(--borda); }
         
-        .detalhes-expositor { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; border-top: 1px solid var(--borda); }
-        .descricao-trabalho-tag { font-size: 11px; font-weight: 600; color: #555; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 8px; line-height: 1.4; background: #f5f5f5; padding: 6px 8px; border-radius: 6px; border-left: 3px solid var(--cor-secundaria); }
-        
+        .detalhes-expositor { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .segmento-tag { font-size: 11px; font-weight: 800; color: var(--cor-secundaria); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
         .marca-titulo { font-size: 19px; font-weight: 700; color: #222; margin: 0 0 4px 0; text-transform: uppercase; }
         .responsavel-nome { font-size: 13px; color: #666; margin: 0 0 4px 0; font-weight: 500; }
         .data-expositor-tag { font-size: 11px; color: var(--cor-principal); font-weight: bold; margin-bottom: 12px; background: #f5eeff; display: inline-block; padding: 2px 6px; border-radius: 4px; align-self: flex-start; }
-        
-        .frase-chamada-card { font-size: 11px; color: #673ab7; font-weight: bold; margin-bottom: 12px; background: #fdf6ff; border: 1px dashed #dcaeff; padding: 6px; border-radius: 6px; line-height: 1.3; }
 
         .botoes-contato { display: flex; gap: 10px; margin-top: auto; }
         .btn-rede { flex: 1; text-align: center; text-decoration: none; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.2s; }
+        .btn-rede:hover { opacity: 0.9; }
         .btn-zap { background: var(--verde-zap); }
         .btn-insta { background: var(--insta-cor); }
 
@@ -83,39 +68,33 @@
         .aviso-evento-breve h3 { margin: 0 0 8px 0; color: var(--cor-principal); font-size: 20px; text-transform: uppercase; }
         .aviso-evento-breve p { margin: 0 0 15px 0; color: #666; font-size: 14px; }
 
-        /* Formulário */
+        /* Seção do Formulário */
         #sessao-cadastro { display: none; padding: 25px; max-width: 550px; margin: 0 auto; background: #fff; }
+        .aviso-privacidade { background: #fff4ff; padding: 12px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #f9ebff; font-size: 12px; color: var(--cor-secundaria); line-height: 1.4; }
         .campo { margin-bottom: 15px; }
         .campo label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 5px; color: #444; }
-        .campo input, .campo select, .campo textarea { width: 100%; padding: 11px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
-        .btn-enviar { width: 100%; background: var(--cor-principal); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; }
+        .campo input, .campo select, .campo textarea { width: 100%; padding: 11px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; box-sizing: border-box; font-family: inherit; }
+        .btn-enviar { width: 100%; background: var(--cor-principal); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 14px; margin-top: 10px; }
 
         .banner-protecao { background: var(--cinza-protecao); border-top: 1px solid var(--borda); padding: 15px; text-align: center; font-size: 10px; color: #777; margin-top: auto; }
+        .banner-protecao strong { color: var(--cor-principal); display: block; margin-bottom: 3px; }
     </style>
 </head>
 <body>
 
 <div class="container-guia">
-    
-    <div class="area-capa-topo">
-        <img src="https://raw.githubusercontent.com/claudiaartesdigitais-maker/guiaespacocomprasclaudiadib/main/capa.png" id="img-banner-atual" alt="Espaço de Compras">
-    </div>
-
-    <div class="secao-carrossel-fotos" id="area-carrossel">
-        <div class="carrossel-container" id="container-fotos-local"></div>
-    </div>
-
     <div class="header-locais">
         <h2>Selecione o Espaço de Compras</h2>
         <div class="abas-locais" id="botoes-abas-dinamicas">
-            <span style="font-size:12px; color:#fff;">Sincronizando locais...</span>
+            <span style="font-size:12px; color:#999;">Sincronizando locais...</span>
         </div>
     </div>
 
     <div class="secao-agenda-datas" id="area-agenda-dinamica" style="display: none;">
         <div class="titulo-agenda">🗓️ Agenda de Edições e Inscrições</div>
         <div class="grade-datas-agenda" id="corpo-agenda-datas"></div>
-        <div class="frase-chamada-geral">
+        
+        <div class="banner-chamada-agenda" id="frase-oficial-agenda">
             📣 Confira as marcas presentes, entre em contato e antecipe suas compras ou encomendas direto pelo WhatsApp!
         </div>
     </div>
@@ -128,17 +107,51 @@
 
     <div id="sessao-cadastro">
         <div id="conteudo-form">
-            <button onclick="fecharFormulario()" style="background:#666; color:white; border:none; padding:6px 12px; border-radius:15px; cursor:pointer; font-size:11px; font-weight:bold; margin-bottom:15px;">⬅ VOLTAR</button>
+            <button onclick="fecharFormulario()" style="background:#666; color:white; border:none; padding:6px 12px; border-radius:15px; cursor:pointer; font-size:11px; font-weight:bold; margin-bottom:15px;">⬅ VOLTAR PARA A VITRINE</button>
+            
             <form id="formIndicar">
-                <div class="campo"><label>Espaço de Compras</label><input type="text" name="localEvento" id="formLocalVisivel" readonly style="background:#f5f5f5;"></div>
-                <div class="campo"><label>Data Escolhida</label><input type="text" name="dataEvento" id="formDataVisivel" readonly style="background:#f5f5f5;"></div>
-                <div class="campo"><label>Nome do Responsável</label><input type="text" name="contato" required></div>
-                <div class="campo"><label>Nome da Marca / Loja</label><input type="text" name="marca" required></div>
-                <div class="campo"><label>Segmento</label><select name="segmento" id="selectSegmento" required></select></div>
-                <div class="campo"><label>Descrição dos Produtos</label><textarea name="descricao" rows="3" required></textarea></div>
-                <div class="campo"><label>WhatsApp</label><input type="text" name="whatsapp" id="inputZap" required maxlength="11"></div>
-                <div class="campo"><label>Instagram</label><input type="text" name="instagram" required></div>
-                <div class="campo"><label>Foto do Produto</label><input type="file" name="fotoArquivo" id="fotoArquivo" accept="image/*" required></div>
+                <div class="aviso-privacidade">
+                    <strong>FORMULÁRIO DE INSCRIÇÃO:</strong> Envie as informações de sua marca. Após a aprovação de sua vaga na planilha, sua marca subirá na vitrine oficial.
+                </div>
+                
+                <div class="campo">
+                    <label>Espaço de Compras</label>
+                    <input type="text" name="localEvento" id="formLocalVisivel" readonly style="background: #f5f5f5; font-weight: bold; color: var(--cor-principal);">
+                </div>
+
+                <div class="campo">
+                    <label>Data Escolhida para Expor</label>
+                    <input type="text" name="dataEvento" id="formDataVisivel" readonly style="background: #f5f5f5; font-weight: bold; color: var(--cor-secundaria);">
+                </div>
+
+                <div class="campo"><label>Nome Completo do Responsável</label><input type="text" name="contato" required></div>
+                <div class="campo"><label>E-mail Comercial</label><input type="email" name="email" required></div>
+                <div class="campo"><label>Nome da sua Marca / Loja</label><input type="text" name="marca" required></div>
+                
+                <div class="campo">
+                    <label>Segmento de Atuação</label>
+                    <select name="segmento" id="selectSegmento" onchange="verificarOutroSegmento(this)" required>
+                        <option value="">Carregando segmentos...</option>
+                    </select>
+                </div>
+
+                <div class="campo" id="campoSegmentoTexto" style="display: none;">
+                    <label>Digite o seu Segmento Específico</label>
+                    <input type="text" id="inputSegmentoOutro" placeholder="Ex: Moda Pet Customizada">
+                </div>
+
+                <div class="campo"><label>Descreva seus produtos</label><textarea name="descricao" rows="3" required placeholder="Ex: Doces gourmet, bolos caseiros..."></textarea></div>
+                <div class="campo"><label>WhatsApp Comercial (DDD+Número sem espaços)</label><input type="text" name="whatsapp" id="inputZap" required maxlength="11" placeholder="Ex: 11988887777"></div>
+                <div class="campo"><label>Instagram da Loja</label><input type="text" name="instagram" placeholder="Ex: @sualoja" required></div>
+                <div class="campo"><label>Facebook da Loja (Opcional)</label><input type="text" name="facebook" placeholder="Ex: facebook.com/sualoja"></div>
+                <div class="campo"><label>TikTok da Loja (Opcional)</label><input type="text" name="tiktok" placeholder="Ex: @sualojatiktok"></div>
+                <div class="campo"><label>Qual evento você já fez com a Cláudia Dib?</label><input type="text" name="eventoAnterior" placeholder="Se for o primeiro, digite: Nenhum" required></div>
+                
+                <div class="campo">
+                    <label>Foto do Produto ou Logomarca</label>
+                    <input type="file" name="fotoArquivo" id="fotoArquivo" accept="image/*" required>
+                </div>
+                
                 <button type="submit" class="btn-enviar" id="btnEnviar">Enviar Inscrição</button>
             </form>
         </div>
@@ -147,6 +160,7 @@
 
 <div class="banner-protecao">
     <strong>© Cláudia Dib - Espaço de Compras</strong>
+    As ativações e exibições dependem da aprovação de participação no evento.
 </div>
 
 <script>
@@ -155,7 +169,6 @@
     let dadosGerais = [];
     let proximasDatas = {};
     let listaSegmentosDoBanco = [];
-    let dadosBannersPlanilha = []; 
     let localSelecionado = "";
     let dataSelecionadaForm = "";
 
@@ -164,7 +177,6 @@
         if(elemento) elemento.classList.add('ativo');
         localSelecionado = novoLocal;
         fecharFormulario();
-        atualizarCarrosselDinamico(); 
         filtrarEExibir();
     }
 
@@ -182,50 +194,29 @@
         document.getElementById('sessao-cadastro').style.display = "none";
     }
 
-    function formatarDataDoBanco(dataBruta) {
-        if (!dataBruta) return "Confirmada";
-        let str = dataBruta.toString();
-        if (str.includes("GMT") || str.includes(":") || str.includes("-")) {
-            try {
-                let d = new Date(dataBruta);
-                if (!isNaN(d.getTime())) return d.toLocaleDateString('pt-BR');
-            } catch(e) {}
+    function verificarOutroSegmento(select) {
+        const campoTexto = document.getElementById('campoSegmentoTexto');
+        const inputTexto = document.getElementById('inputSegmentoOutro');
+        if (select.value.toLowerCase() === 'outros' || select.value.toLowerCase() === 'outro') {
+            campoTexto.style.display = 'block';
+            inputTexto.required = true;
+        } else {
+            campoTexto.style.display = 'none';
+            inputTexto.required = false;
+            inputTexto.value = '';
         }
-        if (str.includes(" ")) str = str.split(" ")[0];
-        return str;
     }
 
-    /* === ATUALIZA O CARROSSEL COM TODAS AS IMAGENS DA COLUNA B === */
-    function atualizarCarrosselDinamico() {
-        const areaCarrossel = document.getElementById('area-carrossel');
-        const containerFotos = document.getElementById('container-fotos-local');
-        
-        if (!localSelecionado || dadosBannersPlanilha.length === 0) {
-            areaCarrossel.style.display = "none";
-            return;
+    function formatarDataDoBanco(dataBruta) {
+        if (!dataBruta) return "Confirmada";
+        if (dataBruta.toString().includes("GMT")) {
+            try {
+                return new Date(dataBruta).toLocaleDateString('pt-BR');
+            } catch(e) {
+                return dataBruta;
+            }
         }
-
-        // Filtra todas as linhas da aba Banner pertencentes ao local selecionado
-        const bannersDoLocal = dadosBannersPlanilha.filter(b => {
-            const nomeLocal = b.localEvento || b.local || "";
-            return nomeLocal.toString().trim().toLowerCase() === localSelecionado.trim().toLowerCase();
-        });
-
-        // Junta todos os links válidos encontrados na coluna "foto" (Coluna B)
-        const fotosValidas = bannersDoLocal
-            .map(b => b.foto || "")
-            .filter(url => url.trim() !== "");
-
-        if (fotosValidas.length > 0) {
-            areaCarrossel.style.display = "block";
-            containerFotos.innerHTML = fotosValidas.map(url => `
-                <div class="slide-foto">
-                    <img src="${url.trim()}" onerror="this.src='https://via.placeholder.com/400?text=Espaço+de+Compras'">
-                </div>
-            `).join('');
-        } else {
-            areaCarrossel.style.display = "none";
-        }
+        return dataBruta;
     }
 
     async function buscarDados() {
@@ -236,7 +227,6 @@
             dadosGerais = pacoteData.expositores || [];
             proximasDatas = pacoteData.proximasDatas || {};
             listaSegmentosDoBanco = pacoteData.segmentos || [];
-            dadosBannersPlanilha = pacoteData.banners || []; 
             
             const containerAbas = document.getElementById('botoes-abas-dinamicas');
             const listaLocais = pacoteData.locais || [];
@@ -250,27 +240,34 @@
 
             const selectSeg = document.getElementById('selectSegmento');
             if(listaSegmentosDoBanco.length > 0) {
-                selectSeg.innerHTML = '<option value="">Selecione...</option>' + listaSegmentosDoBanco.map(seg => `<option value="${seg}">${seg}</option>`).join('');
+                let htmlSeg = '<option value="">Selecione o seu segmento...</option>';
+                listaSegmentosDoBanco.forEach(seg => {
+                    htmlSeg += `<option value="${seg}">${seg}</option>`;
+                });
+                htmlSeg += '<option value="Outros">Outros</option>';
+                selectSeg.innerHTML = htmlSeg;
             }
             
-            atualizarCarrosselDinamico(); 
             filtrarEExibir();
         } catch (e) { 
-            document.getElementById('botoes-abas-dinamicas').innerHTML = `<span style="color:#ff4444;">Erro de conexão.</span>`;
+            document.getElementById('botoes-abas-dinamicas').innerHTML = `<span style="font-size:12px; color:#ff4444;">Erro na conexão com o banco de dados.</span>`;
         }
     }
 
     function converterData(stringData) {
         if (!stringData) return null;
-        let alvo = stringData.toString();
-        if(alvo.includes(" ")) alvo = alvo.split(" ")[0];
-        if(alvo.includes("a")) {
-            const partesIntervalo = alvo.split("a");
+        let alvo = stringData;
+        if(stringData.includes("a")) {
+            const partesIntervalo = stringData.split("a");
             alvo = partesIntervalo[partesIntervalo.length - 1].trim();
         }
         const partes = alvo.split('/');
-        if (partes.length === 2) return new Date(new Date().getFullYear(), partes[1] - 1, partes[0]);
-        if (partes.length === 3) return new Date(partes[2], partes[1] - 1, partes[0]);
+        if (partes.length === 2) { 
+            return new Date(new Date().getFullYear(), partes[1] - 1, partes[0]);
+        }
+        if (partes.length === 3) { 
+            return new Date(partes[2], partes[1] - 1, partes[0]);
+        }
         return null;
     }
 
@@ -278,33 +275,38 @@
         let hoje = new Date();
         hoje.setHours(0,0,0,0);
         let dataObj = converterData(strData);
+        
         if(!dataObj) return { classe: "status-futuro", texto: "Inscrições Abertas", disabled: false };
-        if(hoje.getTime() === dataObj.getTime()) return { classe: "status-ativo", texto: "💥 Acontecendo Hoje", disabled: true };
-        if(hoje > dataObj) return { classe: "status-passado", texto: "Encerrado 🔒", disabled: true };
+        
+        if(hoje.getTime() === dataObj.getTime()) {
+            return { classe: "status-ativo", texto: "💥 Acontecendo Hoje", disabled: true };
+        }
+        if(hoje > dataObj) {
+            return { classe: "status-passado", texto: "Encerrado 🔒", disabled: true };
+        }
         return { classe: "status-futuro", texto: "Inscrições Abertas", disabled: false };
     }
 
     function filtrarEExibir() {
-        const cuerpo = document.getElementById('lista-corpo');
+        const corpo = document.getElementById('lista-corpo');
         const areaAgenda = document.getElementById('area-agenda-dinamica');
         const corpoAgenda = document.getElementById('corpo-agenda-datas');
+        const fraseAgenda = document.getElementById('frase-oficial-agenda');
         
         if (!localSelecionado) return;
 
         const filtrados = dadosGerais.filter(i => i.localEvento === localSelecionado);
         const arrayDeDatasDoLocal = proximasDatas[localSelecionado] || [];
 
-        /* === RECUPERADO: TRAZ DE VOLTA O COMPORTAMENTO ORIGINAL DAS AGENDAS VAZIAS === */
         if (arrayDeDatasDoLocal.length > 0) {
             areaAgenda.style.display = "block";
             corpoAgenda.innerHTML = arrayDeDatasDoLocal.map(dt => {
                 const infoStatus = calcularStatusDaData(dt);
-                const dataLimpaVisual = formatarDataDoBanco(dt);
                 return `
                     <div class="card-data-status">
-                        <div class="data-texto">📅 ${dataLimpaVisual}</div>
+                        <div class="data-texto">📅 ${dt}</div>
                         <span class="selo-status ${infoStatus.classe}">${infoStatus.texto}</span>
-                        <button class="btn-acao-agenda" ${infoStatus.disabled ? 'disabled' : ''} onclick="abrirFormulario('${dataLimpaVisual}')">
+                        <button class="btn-acao-agenda" ${infoStatus.disabled ? 'disabled' : ''} onclick="abrirFormulario('${dt}')">
                             ${infoStatus.disabled ? 'Bloqueado' : 'Inscrever ➕'}
                         </button>
                     </div>
@@ -322,16 +324,23 @@
         }
         
         if (filtrados.length === 0) {
-            cuerpo.innerHTML = `
+            if(fraseAgenda) fraseAgenda.style.display = "none"; 
+            corpo.innerHTML = `
                 <div class="aviso-evento-breve">
                     <h3>🏛️ ${localSelecionado}</h3>
                     <p>Nenhuma marca ativa na vitrine deste local no momento.</p>
+                    <p style="font-size:12px; color:#666;">Escolha uma das datas na agenda acima para realizar a sua inscrição oficial!</p>
                 </div>
             `;
             return;
         }
         
-        cuerpo.innerHTML = filtrados.map(item => {
+        // Mantém a frase visível para qualquer local que contenha marcas ativas
+        if (fraseAgenda) {
+            fraseAgenda.style.display = "block";
+        }
+
+        corpo.innerHTML = filtrados.map(item => {
             let urlFoto = item.foto || "";
             if (urlFoto.includes('drive.google.com')) {
                 const match = urlFoto.match(/[-\w]{25,}/);
@@ -339,22 +348,22 @@
             }
             if(!urlFoto) urlFoto = 'https://via.placeholder.com/400?text=Espaço+de+Compras';
 
-            let botaoInsta = item.instagram ? `<a href="${item.instagram}" class="btn-rede btn-insta" target="_blank">📸 Instagram</a>` : "";
+            let botaoInsta = "";
+            if(item.instagram) {
+                botaoInsta = `<a href="${item.instagram}" class="btn-rede btn-insta" target="_blank">📸 Instagram</a>`;
+            }
+
             let dataFormatadaExpositor = formatarDataDoBanco(item.dataEvento);
-            let descricaoTrabalho = item.descricao && item.descricao.trim() !== "" ? item.descricao : "Artesanato & Variedades";
 
             return `
                 <div class="card-expositor">
-                    <div class="container-foto-recolhida">
-                        <a href="${item.foto}" target="_blank" class="link-foto-clicavel">
-                            <img src="${urlFoto}" class="foto-expositor">
-                        </a>
-                    </div>
+                    <img src="${urlFoto}" class="foto-expositor" onerror="this.src='https://via.placeholder.com/400?text=Espaço+de+Compras'">
                     <div class="detalhes-expositor">
-                        <div class="descricao-trabalho-tag">🎨 ${descricaoTrabalho}</div>
+                        <span class="segmento-tag">🛍️ ${item.descricao || "Geral"}</span>
                         <h3 class="marca-titulo">${item.marca || "Expositor"}</h3>
                         <p class="responsavel-nome">👤 Por: ${item.contato}</p>
                         <span class="data-expositor-tag">🗓️ Edição: ${dataFormatadaExpositor}</span>
+                        
                         <div class="botoes-contato">
                             <a href="${item.whatsapp}" class="btn-rede btn-zap" target="_blank">📱 WhatsApp</a>
                             ${botaoInsta}
@@ -367,6 +376,61 @@
 
     const inputZap = document.getElementById('inputZap');
     if(inputZap) inputZap.addEventListener('input', function(e) { this.value = this.value.replace(/\D/g, ''); });
+
+    document.getElementById('formIndicar').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnEnviar');
+        btn.innerText = "Enviando dados e foto..."; btn.disabled = true;
+        
+        const fileInput = document.getElementById('fotoArquivo');
+        const file = fileInput.files[0];
+        
+        if(!file) { alert("Por favor, selecione uma foto."); btn.disabled = false; return; }
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async function () {
+            const base64Data = reader.result.split(',')[1];
+            const formData = new FormData(e.target);
+            
+            let segmentoSelecionado = formData.get('segmento');
+            if(segmentoSelecionado.toLowerCase() === 'outros' || segmentoSelecionado.toLowerCase() === 'outro') {
+                segmentoSelecionado = document.getElementById('inputSegmentoOutro').value.trim();
+                if(!segmentoSelecionado) { segmentoSelecionado = "Outros"; }
+            }
+            
+            const objeto = {
+                contato: formData.get('contato'),
+                email: formData.get('email'),
+                marca: formData.get('marca'),
+                segmento: segmentoSelecionado,
+                descricao: formData.get('descricao'),
+                whatsapp: formData.get('whatsapp'),
+                instagram: formData.get('instagram'),
+                facebook: formData.get('facebook') || "",
+                tiktok: formData.get('tiktok') || "",
+                eventoAnterior: formData.get('eventoAnterior'),
+                localEvento: localSelecionado,
+                dataEvento: dataSelecionadaForm, 
+                arquivoData: base64Data,
+                arquivoNome: file.name,
+                arquivoMime: file.type
+            };
+            
+            try {
+                await fetch(URL_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(objeto) });
+                document.getElementById('conteudo-form').innerHTML = `
+                    <div style="text-align: center; padding: 30px;">
+                        <div style="font-size: 40px;">🎉</div>
+                        <h2 style="color: var(--cor-principal);">Inscrição Recebida!</h2>
+                        <p>Sua marca foi registrada para o evento de <strong>${dataSelecionadaForm}</strong> em <strong>${localSelecionado}</strong>.</p>
+                        <p style="font-size:13px; color:#666;">Assim que a sua vaga for aprovada na planilha, sua marca subirá automaticamente na vitrine!</p>
+                        <button onclick="location.reload()" class="btn-enviar">VOLTAR PARA A VITRINE</button>
+                    </div>
+                `;
+            } catch (err) { alert("Erro ao enviar dados."); btn.innerText = "Enviar Inscrição"; btn.disabled = false; }
+        };
+    };
 
     buscarDados();
 </script>
