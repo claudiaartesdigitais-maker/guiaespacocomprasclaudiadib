@@ -13,11 +13,38 @@
             --insta-cor: #e1306c;
             --borda: #f0e6ff; 
             --cinza-protecao: #f8f9fa; 
+            --rosa-botao: #d70f76;
         }
         
         body { margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; background: #fafafa; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
         
         .container-guia { background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--borda); margin: 15px; flex-grow: 1; box-shadow: 0 4px 15px rgba(103, 58, 183, 0.08); }
+
+        /* ==================== ESTRUTURA DA GALERIA CORRIGIDA ==================== */
+        .wrapper-carrossel { position: relative; width: 100%; background: #fff; padding: 20px 0 10px 0; overflow: hidden; }
+        
+        .container-slides { display: flex; overflow-x: auto; scroll-behavior: smooth; snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .container-slides::-webkit-scrollbar { display: none; }
+        
+        .slide-item { flex: 0 0 100%; snap-align: start; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; padding: 0 45px; }
+        
+        .slide-item img { width: 100%; max-width: 480px; height: auto; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; transition: transform 0.2s; }
+        .slide-item img:hover { transform: scale(1.02); }
+
+        /* Setas chamativas nas laterais */
+        .seta-galeria { position: absolute; top: 45%; transform: translateY(-50%); background: var(--cor-principal); color: white; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; transition: 0.2s; box-shadow: 0 3px 8px rgba(103, 58, 183, 0.3); }
+        .seta-galeria:hover { background: var(--cor-secundaria); transform: translateY(-50%) scale(1.1); }
+        .seta-esq { left: 10px; }
+        .seta-dir { right: 10px; }
+
+        /* Pontinhos indicadores embaixo para avisar que tem mais fotos */
+        .indicadores-galeria { display: flex; justify-content: center; gap: 6px; margin-top: 12px; }
+        .ponto { width: 8px; height: 8px; background: #ddd; border-radius: 50%; transition: 0.3s; }
+        .ponto.ativo { background: var(--cor-principal); width: 16px; border-radius: 4px; }
+
+        /* Divisória de separação antes da capa */
+        .espaco-divisor { height: 20px; background: #fafafa; border-top: 1px solid var(--borda); border-bottom: 1px solid var(--borda); }
+        /* ==================================================================== */
 
         .capa-superior { width: 100%; display: block; height: auto; object-fit: cover; }
 
@@ -41,10 +68,9 @@
         .status-ativo { background: #fff3e0; color: #ef6c00; }
         .status-passado { background: #ffebee; color: #c62828; }
         
-        .btn-acao-agenda { background: #d70f76; color: white; border: none; padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        .btn-acao-agenda { background: var(--rosa-botao); color: white; border: none; padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .btn-acao-agenda:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* Estilo para a frase oficial posicionada abaixo dos botões cor de rosa */
         .banner-chamada-agenda { display: none; max-width: 800px; margin: 15px auto 0 auto; font-size: 12px; color: #673ab7; font-weight: bold; background: #fdf6ff; border: 1px dashed #dcaeff; padding: 10px; border-radius: 8px; text-align: center; line-height: 1.4; }
 
         /* Mosaico de Cards de Expositores */
@@ -85,6 +111,38 @@
 <body>
 
 <div class="container-guia">
+    
+    <div class="wrapper-carrossel">
+        <button class="seta-galeria seta-esq" onclick="navegarGaleria(-1)">&#10094;</button>
+        
+        <div class="container-slides" id="carrosselSlides">
+            <div class="slide-item"><img src="https://raw.githubusercontent.com/claudiaartesdigitais-maker/guiaespacocomprasclaudiadib/main/1.png" alt="Informativo 1" onclick="window.open(this.src, '_blank')"></div>
+            <div class="slide-item"><img src="https://raw.githubusercontent.com/claudiaartesdigitais-maker/guiaespacocomprasclaudiadib/main/2.png" alt="Informativo 2" onclick="window.open(this.src, '_blank')"></div>
+            <div class="slide-item"><img src="https://raw.githubusercontent.com/claudiaartesdigitais-maker/guiaespacocomprasclaudiadib/main/3.png" alt="Informativo 3" onclick="window.open(this.src, '_blank')"></div>
+            <div class="slide-item"><img src="https://raw.githubusercontent.com/claudiaartesdigitais-maker/guiaespacocomprasclaudiadib/main/4.png" alt="Informativo 4" onclick="window.open(this.src, '_blank')"></div>
+            
+            <div class="slide-item"><img src="https://raw.githubusercontent.com/claudiaartesdigitais-maker/guiaespacocomprasclaudiadib/main/5.jpg" alt="Informativo 5" onclick="window.open(this.src, '_blank')"></div>
+            <div class="slide-item"><img src="https://raw.githubusercontent.com/claudiaartesdigitais-maker/guiaespacocomprasclaudiadib/main/6.jpg" alt="Informativo 6" onclick="window.open(this.src, '_blank')"></div>
+            <div class="slide-item"><img src="https://raw.githubusercontent.com/claudiaartesdigitais-maker/guiaespacocomprasclaudiadib/main/7.jpg" alt="Informativo 7" onclick="window.open(this.src, '_blank')"></div>
+            <div class="slide-item"><img src="https://raw.githubusercontent.com/claudiaartesdigitais-maker/guiaespacocomprasclaudiadib/main/8.jpg" alt="Informativo 8" onclick="window.open(this.src, '_blank')"></div>
+        </div>
+
+        <button class="seta-galeria seta-dir" onclick="navegarGaleria(1)">&#10095;</button>
+
+        <div class="indicadores-galeria">
+            <span class="ponto ativo"></span>
+            <span class="ponto"></span>
+            <span class="ponto"></span>
+            <span class="ponto"></span>
+            <span class="ponto"></span>
+            <span class="ponto"></span>
+            <span class="ponto"></span>
+            <span class="ponto"></span>
+        </div>
+    </div>
+
+    <div class="espaco-divisor"></div>
+
     <img src="https://raw.githubusercontent.com/claudiaartesdigitais-maker/guiaespacocomprasclaudiadib/main/capa.png" alt="Capa Espaço de Compras" class="capa-superior">
 
     <div class="header-locais">
@@ -176,6 +234,22 @@
     let localSelecionado = "";
     let dataSelecionadaForm = "";
 
+    const galeriaSlides = document.getElementById('carrosselSlides');
+    const pontos = document.querySelectorAll('.ponto');
+    
+    function navegarGaleria(direcao) {
+        const larguraDoSlide = galeriaSlides.clientWidth;
+        galeriaSlides.scrollBy({ left: direcao * larguraDoSlide, behavior: 'smooth' });
+    }
+
+    galeriaSlides.addEventListener('scroll', () => {
+        const indiceAtivo = Math.round(galeriaSlides.scrollLeft / galeriaSlides.clientWidth);
+        pontos.forEach((ponto, i) => {
+            if(i === indiceAtivo) ponto.classList.add('ativo');
+            else ponto.classList.remove('ativo');
+        });
+    });
+
     function mudarLocal(novoLocal, elemento) {
         document.querySelectorAll('.btn-local').forEach(b => b.classList.remove('ativo'));
         if(elemento) elemento.classList.add('ativo');
@@ -214,11 +288,7 @@
     function formatarDataDoBanco(dataBruta) {
         if (!dataBruta) return "Confirmada";
         if (dataBruta.toString().includes("GMT")) {
-            try {
-                return new Date(dataBruta).toLocaleDateString('pt-BR');
-            } catch(e) {
-                return dataBruta;
-            }
+            try { return new Date(dataBruta).toLocaleDateString('pt-BR'); } catch(e) { return dataBruta; }
         }
         return dataBruta;
     }
@@ -266,28 +336,17 @@
             alvo = partesIntervalo[partesIntervalo.length - 1].trim();
         }
         const partes = alvo.split('/');
-        if (partes.length === 2) { 
-            return new Date(new Date().getFullYear(), partes[1] - 1, partes[0]);
-        }
-        if (partes.length === 3) { 
-            return new Date(partes[2], partes[1] - 1, partes[0]);
-        }
+        if (partes.length === 2) return new Date(new Date().getFullYear(), partes[1] - 1, partes[0]);
+        if (partes.length === 3) return new Date(partes[2], partes[1] - 1, partes[0]);
         return null;
     }
 
     function calcularStatusDaData(strData) {
-        let hoje = new Date();
-        hoje.setHours(0,0,0,0);
+        let hoje = new Date(); hoje.setHours(0,0,0,0);
         let dataObj = converterData(strData);
-        
         if(!dataObj) return { classe: "status-futuro", texto: "Inscrições Abertas", disabled: false };
-        
-        if(hoje.getTime() === dataObj.getTime()) {
-            return { classe: "status-ativo", texto: "💥 Acontecendo Hoje", disabled: true };
-        }
-        if(hoje > dataObj) {
-            return { classe: "status-passado", texto: "Encerrado 🔒", disabled: true };
-        }
+        if(hoje.getTime() === dataObj.getTime()) return { classe: "status-ativo", texto: "💥 Acontecendo Hoje", disabled: true };
+        if(hoje > dataObj) return { classe: "status-passado", texto: "Encerrado 🔒", disabled: true };
         return { classe: "status-futuro", texto: "Inscrições Abertas", disabled: false };
     }
 
@@ -339,9 +398,7 @@
             return;
         }
         
-        if (fraseAgenda) {
-            fraseAgenda.style.display = "block";
-        }
+        if (fraseAgenda) fraseAgenda.style.display = "block";
 
         corpo.innerHTML = filtrados.map(item => {
             let urlFoto = item.foto || "";
@@ -387,7 +444,6 @@
         
         const fileInput = document.getElementById('fotoArquivo');
         const file = fileInput.files[0];
-        
         if(!file) { alert("Por favor, selecione uma foto."); btn.disabled = false; return; }
 
         const reader = new FileReader();
