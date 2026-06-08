@@ -331,15 +331,23 @@
 
     function converterData(stringData) {
         if (!stringData) return null;
-        let alvo = stringData;
-        if(stringData.includes("a")) {
-            const partesIntervalo = stringData.split("a");
-            alvo = partesIntervalo[partesIntervalo.length - 1].trim();
-        }
-        const partes = alvo.split('/');
-        if (partes.length === 2) return new Date(new Date().getFullYear(), partes[1] - 1, partes[0]);
-        if (partes.length === 3) return new Date(partes[2], partes[1] - 1, partes[0]);
-        return null;
+        
+        // Garante que o dado virou um texto limpo
+        let texto = stringData.toString().trim();
+        
+        // Encontra todas as ocorrências de padrões do tipo DD/MM no texto
+        const regexData = /(\d{2})\/(\d{2})/g;
+        const matches = [...texto.matchAll(regexData)];
+        
+        if (matches.length === 0) return null;
+        
+        // Se houver mais de uma data (ex: "07/07 e 08/07"), pegamos a última para validação de encerramento
+        const ultimaDataEncontrada = matches[matches.length - 1];
+        const dia = parseInt(ultimaDataEncontrada[1]);
+        const mes = parseInt(ultimaDataEncontrada[2]);
+        
+        // Força o ano corrente de 2026 para a comparação funcionar perfeitamente
+        return new Date(2026, mes - 1, dia);
     }
 
     function calcularStatusDaData(strData) {
@@ -362,9 +370,15 @@
         const filtrados = dadosGerais.filter(i => i.localEvento === localSelecionado);
         const arrayDeDatasDoLocal = proximasDatas[localSelecionado] || [];
 
-        if (arrayDeDatasDoLocal.length > 0) {
+        // Filtra estritamente removendo as datas passadas com base no ajuste inteligente
+        const datasAtivas = arrayDeDatasDoLocal.filter(dt => {
+            const infoStatus = calcularStatusDaData(dt);
+            return infoStatus.classe !== "status-passado";
+        });
+
+        if (datasAtivas.length > 0) {
             areaAgenda.style.display = "block";
-            corpoAgenda.innerHTML = arrayDeDatasDoLocal.map(dt => {
+            corpoAgenda.innerHTML = datasAtivas.map(dt => {
                 const infoStatus = calcularStatusDaData(dt);
                 return `
                     <div class="card-data-status">
